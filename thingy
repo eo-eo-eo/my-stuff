@@ -1,0 +1,273 @@
+local screenGui = Instance.new("ScreenGui")
+screenGui.ResetOnSpawn = false
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local flyButton = Instance.new("TextButton")
+flyButton.Size = UDim2.new(0, 200, 0, 50)
+flyButton.Position = UDim2.new(0.5, -250, 0.5, -75)
+flyButton.Text = "Toggle Fly"
+flyButton.Parent = screenGui
+
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(0, 100, 0, 50)
+textBox.Position = UDim2.new(0.5, 0, 0.5, -75)
+textBox.Text = "50"
+textBox.Parent = screenGui
+
+local noclipButton = Instance.new("TextButton")
+noclipButton.Size = UDim2.new(0, 200, 0, 50)
+noclipButton.Position = UDim2.new(0.5, -250, 0.5, 0)
+noclipButton.Text = "Enable Noclip"
+noclipButton.Parent = screenGui
+
+local walkSpeedTextBox = Instance.new("TextBox")
+walkSpeedTextBox.Size = UDim2.new(0, 100, 0, 50)
+walkSpeedTextBox.Position = UDim2.new(0.5, 0, 0.5, 55)
+walkSpeedTextBox.Text = "16"
+walkSpeedTextBox.Parent = screenGui
+
+local setWalkSpeedButton = Instance.new("TextButton")
+setWalkSpeedButton.Size = UDim2.new(0, 200, 0, 50)
+setWalkSpeedButton.Position = UDim2.new(0.5, -250, 0.5, 105)
+setWalkSpeedButton.Text = "Set Walk Speed"
+setWalkSpeedButton.Parent = screenGui
+
+local defaultWalkSpeedButton = Instance.new("TextButton")
+defaultWalkSpeedButton.Size = UDim2.new(0, 200, 0, 50)
+defaultWalkSpeedButton.Position = UDim2.new(0.5, -250, 0.5, 160)
+defaultWalkSpeedButton.Text = "Default Walk Speed"
+defaultWalkSpeedButton.Parent = screenGui
+
+local invisibilityButton = Instance.new("TextButton")
+invisibilityButton.Size = UDim2.new(0, 200, 0, 50)
+invisibilityButton.Position = UDim2.new(0.5, -250, 0.5, 215)
+invisibilityButton.Text = "Toggle Invisibility"
+invisibilityButton.Parent = screenGui
+
+local flingButton = Instance.new("TextButton")
+flingButton.Size = UDim2.new(0, 200, 0, 50)
+flingButton.Position = UDim2.new(0.5, -250, 0.5, 270)
+flingButton.Text = "Toggle Fling"
+flingButton.Parent = screenGui
+
+local flying = false
+local speed = tonumber(textBox.Text) or 50
+local noclip = false
+local invisible = false
+local fling = false
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+local function enableFly()
+    humanoid.PlatformStand = true
+
+    local bodyGyro = Instance.new("BodyGyro")
+    bodyGyro.MaxTorque = Vector3.new(400000, 400000, 400000)
+    bodyGyro.P = 4000
+    bodyGyro.CFrame = rootPart.CFrame
+    bodyGyro.Parent = rootPart
+
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)
+    bodyVelocity.Parent = rootPart
+
+    local userInputService = game:GetService("UserInputService")
+
+    local function updateMovement()
+        if flying then
+            local cameraCF = camera.CFrame
+            local movement = Vector3.new(0, 0, 0)
+
+            if userInputService:IsKeyDown(Enum.KeyCode.W) then
+                movement = movement + cameraCF.LookVector
+            end
+            if userInputService:IsKeyDown(Enum.KeyCode.S) then
+                movement = movement - cameraCF.LookVector
+            end
+            if userInputService:IsKeyDown(Enum.KeyCode.A) then
+                movement = movement - cameraCF.RightVector
+            end
+            if userInputService:IsKeyDown(Enum.KeyCode.D) then
+                movement = movement + cameraCF.RightVector
+            end
+            if userInputService:IsKeyDown(Enum.KeyCode.Space) then
+                movement = movement + Vector3.new(0, 1, 0)
+            end
+            if userInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+                movement = movement - Vector3.new(0, 1, 0)
+            end
+
+            if movement.Magnitude > 0 then
+                movement = movement.Unit
+                bodyVelocity.Velocity = movement * speed
+                bodyGyro.CFrame = CFrame.lookAt(rootPart.Position, rootPart.Position + movement)
+            else
+                bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+                bodyGyro.CFrame = rootPart.CFrame
+            end
+        end
+    end
+
+    local connection
+    connection = game:GetService("RunService").Stepped:Connect(function()
+        if flying then
+            updateMovement()
+        end
+    end)
+
+    game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+        if connection then
+            connection:Disconnect()
+        end
+    end)
+end
+
+local function disableFly()
+    humanoid.PlatformStand = false
+    if rootPart:FindFirstChild("BodyGyro") then
+        rootPart.BodyGyro:Destroy()
+    end
+    if rootPart:FindFirstChild("BodyVelocity") then
+        rootPart.BodyVelocity:Destroy()
+    end
+end
+
+local function toggleFly()
+    flying = not flying
+    if flying then
+        speed = tonumber(textBox.Text) or 50
+        enableFly()
+        flyButton.Text = "Stop Flying"
+    else
+        disableFly()
+        flyButton.Text = "Toggle Fly"
+    end
+end
+
+local function updateNoclip()
+    while noclip do
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+        wait(0.1)
+    end
+end
+
+local function toggleNoclip()
+    noclip = not noclip
+    if noclip then
+        spawn(updateNoclip)
+        noclipButton.Text = "Disable Noclip"
+    else
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+        noclipButton.Text = "Enable Noclip"
+    end
+end
+
+local function setWalkSpeed()
+    local walkSpeed = tonumber(walkSpeedTextBox.Text) or 16
+    humanoid.WalkSpeed = walkSpeed
+end
+
+local function setDefaultWalkSpeed()
+    humanoid.WalkSpeed = 16
+end
+
+local function toggleVisibility()
+    invisible = not invisible
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Character and player.Character:FindFirstChild("Head") then
+            if invisible then
+                player.Character.Head.Transparency = 1
+                player.Character.Head.BrickColor = BrickColor.new("Institutional white")
+                for _, part in pairs(player.Character:GetDescendants()) do
+                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                        part.Transparency = 1
+                    end
+                end
+                local face = player.Character.Head:FindFirstChildOfClass("Decal")
+                if face then
+                    face.Transparency = 1
+                end
+            else
+                player.Character.Head.Transparency = 0
+                player.Character.Head.BrickColor = BrickColor.new("White")
+                for _, part in pairs(player.Character:GetDescendants()) do
+                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                        part.Transparency = 0
+                    end
+                end
+                local face = player.Character.Head:FindFirstChildOfClass("Decal")
+                if face then
+                    face.Transparency = 0
+                end
+            end
+        end
+    end
+    invisibilityButton.Text = invisible and "Disable Invisibility" or "Toggle Invisibility"
+end
+
+local function ensureRootPartTransparency()
+    while true do
+        if rootPart then
+            rootPart.Transparency = 1
+        end
+        wait(1)
+    end
+end
+
+local function toggleFling()
+    fling = not fling
+    flingButton.Text = fling and "Disable Fling" or "Toggle Fling"
+    
+    if character:FindFirstChild("FlingConnection") then
+        character.FlingConnection:Disconnect()
+        character.FlingConnection = nil
+    end
+    
+    if fling then
+        local function onTouched(otherPart)
+            local otherCharacter = otherPart.Parent
+            if otherCharacter and otherCharacter:IsA("Model") and otherCharacter:FindFirstChild("Humanoid") then
+                if otherCharacter ~= character then
+                    local humanoid = otherCharacter:FindFirstChild("Humanoid")
+                    if humanoid then
+                        humanoid.Health = 0
+                    end
+                end
+            end
+        end
+        
+        local flingConnection = rootPart.Touched:Connect(onTouched)
+        character.FlingConnection = flingConnection
+    end
+end
+
+flyButton.MouseButton1Click:Connect(toggleFly)
+noclipButton.MouseButton1Click:Connect(toggleNoclip)
+setWalkSpeedButton.MouseButton1Click:Connect(setWalkSpeed)
+defaultWalkSpeedButton.MouseButton1Click:Connect(setDefaultWalkSpeed)
+invisibilityButton.MouseButton1Click:Connect(toggleVisibility)
+flingButton.MouseButton1Click:Connect(toggleFling)
+
+textBox.FocusLost:Connect(function()
+    speed = tonumber(textBox.Text) or 50
+end)
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+    humanoid = character:WaitForChild("Humanoid")
+    rootPart = character:WaitForChild("HumanoidRootPart")
+
+    spawn(ensureRootPartTransparency)
+end)
