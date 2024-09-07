@@ -4,49 +4,49 @@ screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local flyButton = Instance.new("TextButton")
 flyButton.Size = UDim2.new(0, 200, 0, 50)
-flyButton.Position = UDim2.new(0.5, -250, 0.5, -75)
+flyButton.Position = UDim2.new(0.5, -250, 0.5, -225)
 flyButton.Text = "Toggle Fly"
 flyButton.Parent = screenGui
 
 local textBox = Instance.new("TextBox")
 textBox.Size = UDim2.new(0, 100, 0, 50)
-textBox.Position = UDim2.new(0.5, 0, 0.5, -75)
+textBox.Position = UDim2.new(0.5, 0, 0.5, -225)
 textBox.Text = "50"
 textBox.Parent = screenGui
 
 local noclipButton = Instance.new("TextButton")
 noclipButton.Size = UDim2.new(0, 200, 0, 50)
-noclipButton.Position = UDim2.new(0.5, -250, 0.5, 0)
+noclipButton.Position = UDim2.new(0.5, -250, 0.5, -165)
 noclipButton.Text = "Enable Noclip"
 noclipButton.Parent = screenGui
 
 local walkSpeedTextBox = Instance.new("TextBox")
 walkSpeedTextBox.Size = UDim2.new(0, 100, 0, 50)
-walkSpeedTextBox.Position = UDim2.new(0.5, 0, 0.5, 55)
+walkSpeedTextBox.Position = UDim2.new(0.5, 0, 0.5, -115)
 walkSpeedTextBox.Text = "16"
 walkSpeedTextBox.Parent = screenGui
 
 local setWalkSpeedButton = Instance.new("TextButton")
 setWalkSpeedButton.Size = UDim2.new(0, 200, 0, 50)
-setWalkSpeedButton.Position = UDim2.new(0.5, -250, 0.5, 105)
+setWalkSpeedButton.Position = UDim2.new(0.5, -250, 0.5, -55)
 setWalkSpeedButton.Text = "Set Walk Speed"
 setWalkSpeedButton.Parent = screenGui
 
 local defaultWalkSpeedButton = Instance.new("TextButton")
 defaultWalkSpeedButton.Size = UDim2.new(0, 200, 0, 50)
-defaultWalkSpeedButton.Position = UDim2.new(0.5, -250, 0.5, 160)
+defaultWalkSpeedButton.Position = UDim2.new(0.5, -250, 0.5, 5)
 defaultWalkSpeedButton.Text = "Default Walk Speed"
 defaultWalkSpeedButton.Parent = screenGui
 
 local invisibilityButton = Instance.new("TextButton")
 invisibilityButton.Size = UDim2.new(0, 200, 0, 50)
-invisibilityButton.Position = UDim2.new(0.5, -250, 0.5, 215)
+invisibilityButton.Position = UDim2.new(0.5, -250, 0.5, 65)
 invisibilityButton.Text = "Toggle Invisibility"
 invisibilityButton.Parent = screenGui
 
 local flingButton = Instance.new("TextButton")
 flingButton.Size = UDim2.new(0, 200, 0, 50)
-flingButton.Position = UDim2.new(0.5, -250, 0.5, 270)
+flingButton.Position = UDim2.new(0.5, -250, 0.5, 125)
 flingButton.Text = "Toggle Fling"
 flingButton.Parent = screenGui
 
@@ -230,33 +230,17 @@ local function toggleFling()
     fling = not fling
     flingButton.Text = fling and "Disable Fling" or "Toggle Fling"
     
-    if character:FindFirstChild("FlingConnection") then
-        character.FlingConnection:Disconnect()
-        character.FlingConnection = nil
-    end
-    
     if fling then
-        local function onTouched(otherPart)
-            local otherCharacter = otherPart.Parent
-            if otherCharacter and otherCharacter:IsA("Model") and otherCharacter:FindFirstChild("Humanoid") then
-                if otherCharacter ~= character then
-                    local humanoidRootPart = otherCharacter:FindFirstChild("HumanoidRootPart")
-                    if humanoidRootPart then
-                        -- Create a BodyVelocity to fling the character
-                        local bodyVelocity = Instance.new("BodyVelocity")
-                        bodyVelocity.Velocity = (humanoidRootPart.Position - rootPart.Position).Unit * 500 -- Adjust the multiplier for fling strength
-                        bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)
-                        bodyVelocity.Parent = humanoidRootPart
-                        
-                        -- Remove BodyVelocity after some time to avoid lingering effects
-                        game:GetService("Debris"):AddItem(bodyVelocity, 0.1)
-                    end
-                end
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
             end
         end
         
-        local flingConnection = rootPart.Touched:Connect(onTouched)
-        character.FlingConnection = flingConnection
+        while fling do
+            rootPart.CFrame = rootPart.CFrame * CFrame.Angles(0, math.rad(360), 0)
+            wait(0.1)
+        end
     end
 end
 
@@ -266,15 +250,3 @@ setWalkSpeedButton.MouseButton1Click:Connect(setWalkSpeed)
 defaultWalkSpeedButton.MouseButton1Click:Connect(setDefaultWalkSpeed)
 invisibilityButton.MouseButton1Click:Connect(toggleVisibility)
 flingButton.MouseButton1Click:Connect(toggleFling)
-
-textBox.FocusLost:Connect(function()
-    speed = tonumber(textBox.Text) or 50
-end)
-
-game.Players.LocalPlayer.CharacterAdded:Connect(function()
-    character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-    humanoid = character:WaitForChild("Humanoid")
-    rootPart = character:WaitForChild("HumanoidRootPart")
-
-    spawn(ensureRootPartTransparency)
-end)
