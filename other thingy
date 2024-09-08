@@ -3,56 +3,57 @@ ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local centerX = 0.5
 local centerY = 0.5
-local buttonWidth = 100
+local buttonWidth = 120
 local buttonHeight = 50
-local spacing = 10
+local spacing = 15
 local verticalOffset = buttonHeight + spacing
+local textboxWidth = 200
 
 local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0, 200, 0, buttonHeight)
-TextBox.Position = UDim2.new(centerX, -100, centerY, -buttonHeight - verticalOffset)
+TextBox.Size = UDim2.new(0, textboxWidth, 0, buttonHeight)
+TextBox.Position = UDim2.new(centerX, -textboxWidth / 2, centerY, -buttonHeight - verticalOffset)
 TextBox.Text = "monsters name here"
 TextBox.Parent = ScreenGui
 
 local Button1 = Instance.new("TextButton")
 Button1.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button1.Position = UDim2.new(centerX, -buttonWidth * 1.5 - spacing, centerY, -buttonHeight / 2)
+Button1.Position = UDim2.new(centerX, -buttonWidth - spacing / 2, centerY, -buttonHeight / 2)
 Button1.Text = "Equip"
 Button1.Parent = ScreenGui
 
 local Button2 = Instance.new("TextButton")
 Button2.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button2.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2)
+Button2.Position = UDim2.new(centerX, spacing / 2, centerY, -buttonHeight / 2)
 Button2.Text = "Unequip"
 Button2.Parent = ScreenGui
 
 local Button3 = Instance.new("TextButton")
 Button3.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button3.Position = UDim2.new(centerX, buttonWidth + spacing - 50, centerY, -buttonHeight / 2)
+Button3.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2 - verticalOffset)
 Button3.Text = "Normal"
 Button3.Parent = ScreenGui
 
 local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 200, 0, buttonHeight)
-ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + verticalOffset)
+ToggleButton.Size = UDim2.new(0, 2 * buttonWidth + spacing, 0, buttonHeight)
+ToggleButton.Position = UDim2.new(centerX, -buttonWidth - spacing / 2, centerY, buttonHeight / 2)
 ToggleButton.Text = "Enable tower duping(laggy)"
 ToggleButton.Parent = ScreenGui
 
 local MorphButton = Instance.new("TextButton")
 MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
+MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset)
 MorphButton.Text = "Morph"
 MorphButton.Parent = ScreenGui
 
 local RainbowButton = Instance.new("TextButton")
 RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 3)
+RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + 2 * verticalOffset)
 RainbowButton.Text = "Random Rainbow Title"
 RainbowButton.Parent = ScreenGui
 
 local RandomTowerButton = Instance.new("TextButton")
 RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 4)
+RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + 3 * verticalOffset)
 RandomTowerButton.Text = "Random Tower"
 RandomTowerButton.Parent = ScreenGui
 
