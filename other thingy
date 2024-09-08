@@ -5,55 +5,62 @@ local centerX = 0.5
 local centerY = 0.5
 local buttonWidth = 120
 local buttonHeight = 50
-local spacing = 15
-local verticalOffset = buttonHeight + spacing
+local spacing = 10
 local textboxWidth = 200
 
+-- TextBox
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0, textboxWidth, 0, buttonHeight)
-TextBox.Position = UDim2.new(centerX, -textboxWidth / 2, centerY, -buttonHeight - verticalOffset)
+TextBox.Position = UDim2.new(centerX, -textboxWidth / 2, centerY, -buttonHeight - spacing)
 TextBox.Text = "monsters name here"
 TextBox.Parent = ScreenGui
 
+-- Equip Button
 local Button1 = Instance.new("TextButton")
 Button1.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button1.Position = UDim2.new(centerX, -buttonWidth - spacing / 2, centerY, -buttonHeight / 2)
+Button1.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2)
 Button1.Text = "Equip"
 Button1.Parent = ScreenGui
 
+-- Unequip Button
 local Button2 = Instance.new("TextButton")
 Button2.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button2.Position = UDim2.new(centerX, spacing / 2, centerY, -buttonHeight / 2)
+Button2.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + spacing)
 Button2.Text = "Unequip"
 Button2.Parent = ScreenGui
 
+-- Normal/Special Toggle Button
 local Button3 = Instance.new("TextButton")
 Button3.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button3.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2 - verticalOffset)
+Button3.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight + 2 * spacing)
 Button3.Text = "Normal"
 Button3.Parent = ScreenGui
 
+-- Enable/Disable Tower Duping Button
 local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 2 * buttonWidth + spacing, 0, buttonHeight)
-ToggleButton.Position = UDim2.new(centerX, -buttonWidth - spacing / 2, centerY, buttonHeight / 2)
+ToggleButton.Size = UDim2.new(0, buttonWidth * 2 + spacing, 0, buttonHeight)
+ToggleButton.Position = UDim2.new(centerX, -buttonWidth - spacing / 2, centerY, buttonHeight * 2 + 3 * spacing)
 ToggleButton.Text = "Enable tower duping(laggy)"
 ToggleButton.Parent = ScreenGui
 
+-- Morph Button
 local MorphButton = Instance.new("TextButton")
 MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset)
+MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight * 3 + 4 * spacing)
 MorphButton.Text = "Morph"
 MorphButton.Parent = ScreenGui
 
+-- Random Rainbow Title Button
 local RainbowButton = Instance.new("TextButton")
 RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + 2 * verticalOffset)
+RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight * 4 + 5 * spacing)
 RainbowButton.Text = "Random Rainbow Title"
 RainbowButton.Parent = ScreenGui
 
+-- Random Tower Button
 local RandomTowerButton = Instance.new("TextButton")
 RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + 3 * verticalOffset)
+RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight * 5 + 6 * spacing)
 RandomTowerButton.Text = "Random Tower"
 RandomTowerButton.Parent = ScreenGui
 
@@ -170,28 +177,28 @@ RainbowButton.MouseButton1Click:Connect(function()
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
 
-                args = { [1] = math.random(1501, 1512) }
+                local args = { [1] = math.random(1501, 1512) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
 
-                args = { [1] = math.random(3002, 3006) }
+                local args = { [1] = math.random(3002, 3006) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
 
-                args = { [1] = math.random(2001, 2013) }
+                local args = { [1] = math.random(2001, 2013) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
 
-                args = { [1] = math.random(1, 25) }
+                local args = { [1] = math.random(1, 25) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
             end
@@ -210,19 +217,19 @@ RandomTowerButton.MouseButton1Click:Connect(function()
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
-                args = { [1] = math.random(1501, 1512) }
+                local args = { [1] = math.random(1501, 1512) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
-                args = { [1] = math.random(3002, 3006) }
+                local args = { [1] = math.random(3002, 3006) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
-                args = { [1] = math.random(2001, 2013) }
+                local args = { [1] = math.random(2001, 2013) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
-                args = { [1] = math.random(1, 25) }
+                local args = { [1] = math.random(1, 25) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
             end
