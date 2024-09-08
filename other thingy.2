@@ -38,12 +38,20 @@ ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + ver
 ToggleButton.Text = "Enable tower duping(laggy)"
 ToggleButton.Parent = ScreenGui
 
+-- New Title Button
+local TitleButton = Instance.new("TextButton")
+TitleButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+TitleButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
+TitleButton.Text = "Title"
+TitleButton.Parent = ScreenGui
+
 local loopEnabled = false
 local isNormal = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
+local TitleRemote = ReplicatedStorage:WaitForChild("Title")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
@@ -119,6 +127,15 @@ ToggleButton.MouseButton1Click:Connect(function()
                 runLoop(monsterId)
             end)()
         end
+    end
+end)
+
+-- Title Button Functionality
+TitleButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        local args = { [1] = monsterId + 1000 }
+        TitleRemote:FireServer(unpack(args))
     end
 end)
 
