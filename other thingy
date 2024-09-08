@@ -38,12 +38,20 @@ ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + ver
 ToggleButton.Text = "Enable tower duping(laggy)"
 ToggleButton.Parent = ScreenGui
 
+-- New Morph Button
+local MorphButton = Instance.new("TextButton")
+MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
+MorphButton.Text = "Morph"
+MorphButton.Parent = ScreenGui
+
 local loopEnabled = false
 local isNormal = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
+local TitleRemote = ReplicatedStorage:WaitForChild("Title")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
@@ -65,16 +73,16 @@ local function getMonsterId(monsterName)
     return monsterMapping[monsterName:lower()] or nil
 end
 
-local function runLoop()
+local function runLoop(monsterId)
     while loopEnabled do
-        local args1 = { [1] = 33, [2] = 1 }
+        local args1 = { [1] = monsterId, [2] = 1 }
         EquipRemote:FireServer(unpack(args1))
         wait(0)
         
-        local args2 = { [1] = 33, [2] = 2 }
+        local args2 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args2))
         
-        local args3 = { [1] = 33, [2] = 2 }
+        local args3 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args3))
         wait(0.2)
     end
@@ -84,7 +92,8 @@ local function fireEquipRemote(monsterId, equipType)
     if isNormal then
         EquipRemote:FireServer(monsterId, equipType)
     else
-        Equip2Remote:FireServer(monsterId, equipType)
+        local args = { [1] = monsterId - 1000, [2] = equipType }
+        Equip2Remote:FireServer(unpack(args))
     end
 end
 
@@ -108,11 +117,25 @@ Button3.MouseButton1Click:Connect(function()
 end)
 
 ToggleButton.MouseButton1Click:Connect(function()
-    loopEnabled = not loopEnabled
-    ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        loopEnabled = not loopEnabled
+        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
 
-    if loopEnabled then
-        coroutine.wrap(runLoop)()
+        if loopEnabled then
+            coroutine.wrap(function()
+                runLoop(monsterId)
+            end)()
+        end
+    end
+end)
+
+-- Morph Button Functionality
+MorphButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        local args = { [1] = monsterId + 1000 }
+        TitleRemote:FireServer(unpack(args))
     end
 end)
 
