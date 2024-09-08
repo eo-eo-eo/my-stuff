@@ -84,7 +84,8 @@ local function fireEquipRemote(monsterId, equipType)
     if isNormal then
         EquipRemote:FireServer(monsterId, equipType)
     else
-        Equip2Remote:FireServer(monsterId, equipType)
+        local args = { [1] = monsterId - 1000, [2] = equipType }
+        Equip2Remote:FireServer(unpack(args))
     end
 end
 
