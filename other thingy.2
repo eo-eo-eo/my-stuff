@@ -65,16 +65,16 @@ local function getMonsterId(monsterName)
     return monsterMapping[monsterName:lower()] or nil
 end
 
-local function runLoop()
+local function runLoop(monsterId)
     while loopEnabled do
-        local args1 = { [1] = 33, [2] = 1 }
+        local args1 = { [1] = monsterId, [2] = 1 }
         EquipRemote:FireServer(unpack(args1))
         wait(0)
         
-        local args2 = { [1] = 33, [2] = 2 }
+        local args2 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args2))
         
-        local args3 = { [1] = 33, [2] = 2 }
+        local args3 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args3))
         wait(0.2)
     end
@@ -109,11 +109,16 @@ Button3.MouseButton1Click:Connect(function()
 end)
 
 ToggleButton.MouseButton1Click:Connect(function()
-    loopEnabled = not loopEnabled
-    ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        loopEnabled = not loopEnabled
+        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
 
-    if loopEnabled then
-        coroutine.wrap(runLoop)()
+        if loopEnabled then
+            coroutine.wrap(function()
+                runLoop(monsterId)
+            end)()
+        end
     end
 end)
 
