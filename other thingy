@@ -38,7 +38,6 @@ ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + ver
 ToggleButton.Text = "Enable tower duping(laggy)"
 ToggleButton.Parent = ScreenGui
 
--- New Morph Button
 local MorphButton = Instance.new("TextButton")
 MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
 MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
@@ -130,7 +129,6 @@ ToggleButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Morph Button Functionality
 MorphButton.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(TextBox.Text)
     if monsterId then
@@ -143,7 +141,9 @@ local function filterTextBoxInput()
     local filteredText = ""
     for i = 1, #TextBox.Text do
         local char = TextBox.Text:sub(i, i)
-        if char:match("[a-z0-9]") then
+        if char:match("[A-Z]") then
+            filteredText = filteredText .. char:lower()
+        elseif char:match("[a-z0-9]") then
             filteredText = filteredText .. char
         end
     end
