@@ -44,8 +44,22 @@ MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeigh
 MorphButton.Text = "Morph"
 MorphButton.Parent = ScreenGui
 
+local RainbowButton = Instance.new("TextButton")
+RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 3)
+RainbowButton.Text = "Random Rainbow Title"
+RainbowButton.Parent = ScreenGui
+
+local RandomTowerButton = Instance.new("TextButton")
+RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 4)
+RandomTowerButton.Text = "Random Tower"
+RandomTowerButton.Parent = ScreenGui
+
 local loopEnabled = false
 local isNormal = true
+local rainbowLoopEnabled = false
+local randomTowerLoopEnabled = false
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
@@ -134,6 +148,84 @@ MorphButton.MouseButton1Click:Connect(function()
     if monsterId then
         local args = { [1] = monsterId + 1000 }
         TitleRemote:FireServer(unpack(args))
+    end
+end)
+
+RainbowButton.MouseButton1Click:Connect(function()
+    rainbowLoopEnabled = not rainbowLoopEnabled
+    RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
+
+    if rainbowLoopEnabled then
+        coroutine.wrap(function()
+            while rainbowLoopEnabled do
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = math.random(1001, 1052) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+
+                args = { [1] = math.random(1501, 1512) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+
+                args = { [1] = math.random(3002, 3006) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+
+                args = { [1] = math.random(2001, 2013) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+
+                args = { [1] = math.random(1, 25) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+            end
+        end)()
+    end
+end)
+
+RandomTowerButton.MouseButton1Click:Connect(function()
+    randomTowerLoopEnabled = not randomTowerLoopEnabled
+    RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
+
+    if randomTowerLoopEnabled then
+        coroutine.wrap(function()
+            while randomTowerLoopEnabled do
+                local args = { [1] = math.random(1001, 1052) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                args = { [1] = math.random(1501, 1512) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                args = { [1] = math.random(3002, 3006) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                args = { [1] = math.random(2001, 2013) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                args = { [1] = math.random(1, 25) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+            end
+        end)()
     end
 end)
 
