@@ -43,6 +43,7 @@ local isNormal = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
+local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
@@ -79,19 +80,25 @@ local function runLoop()
     end
 end
 
+local function fireEquipRemote(monsterId, equipType)
+    if isNormal then
+        EquipRemote:FireServer(monsterId, equipType)
+    else
+        Equip2Remote:FireServer(monsterId, equipType)
+    end
+end
+
 Button1.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(TextBox.Text)
     if monsterId then
-        local args = { [1] = monsterId, [2] = 1 }
-        EquipRemote:FireServer(unpack(args))
+        fireEquipRemote(monsterId, 1)
     end
 end)
 
 Button2.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(TextBox.Text)
     if monsterId then
-        local args = { [1] = monsterId, [2] = 2 }
-        EquipRemote:FireServer(unpack(args))
+        fireEquipRemote(monsterId, 2)
     end
 end)
 
