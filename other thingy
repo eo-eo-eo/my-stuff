@@ -1,0 +1,125 @@
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local centerX = 0.5
+local centerY = 0.5
+local buttonWidth = 100
+local buttonHeight = 50
+local spacing = 10
+local verticalOffset = buttonHeight + spacing
+
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(0, 200, 0, buttonHeight)
+TextBox.Position = UDim2.new(centerX, -100, centerY, -buttonHeight - verticalOffset)
+TextBox.Text = "monsters name here"
+TextBox.Parent = ScreenGui
+
+local Button1 = Instance.new("TextButton")
+Button1.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button1.Position = UDim2.new(centerX, -buttonWidth * 1.5 - spacing, centerY, -buttonHeight / 2)
+Button1.Text = "Equip"
+Button1.Parent = ScreenGui
+
+local Button2 = Instance.new("TextButton")
+Button2.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button2.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2)
+Button2.Text = "Unequip"
+Button2.Parent = ScreenGui
+
+local Button3 = Instance.new("TextButton")
+Button3.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button3.Position = UDim2.new(centerX, buttonWidth + spacing - 50, centerY, -buttonHeight / 2)
+Button3.Text = "Normal"
+Button3.Parent = ScreenGui
+
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0, 200, 0, buttonHeight)
+ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + verticalOffset)
+ToggleButton.Text = "Enable tower duping(laggy)"
+ToggleButton.Parent = ScreenGui
+
+local loopEnabled = false
+local isNormal = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
+
+local monsterMapping = {
+    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
+    snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14, 
+    dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19, moldbygg = 20, shyren = 21, vulkin = 22, 
+    tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27, finalfroggit = 28, 
+    whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34, 
+    orangesoul = 35, purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40, 
+    maddummy = 41, alphys = 42, glyde = 43, sosorry = 44, memoryhead = 45, endogeny = 46, reaperbird = 47, 
+    lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52, rudinn = 501, 
+    hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508, 
+    clover = 509, starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002, 
+    papyrus = 1003, undyne = 1004, muffet = 1005, mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008, 
+    mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012, asriel = 1013, kris = 2001, susie = 2002, 
+    ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
+}
+
+local function getMonsterId(monsterName)
+    return monsterMapping[monsterName:lower()] or nil
+end
+
+local function runLoop()
+    while loopEnabled do
+        local args1 = { [1] = 33, [2] = 1 }
+        EquipRemote:FireServer(unpack(args1))
+        wait(0)
+        
+        local args2 = { [1] = 33, [2] = 2 }
+        EquipRemote:FireServer(unpack(args2))
+        
+        local args3 = { [1] = 33, [2] = 2 }
+        EquipRemote:FireServer(unpack(args3))
+        wait(0.2)
+    end
+end
+
+Button1.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        local args = { [1] = monsterId, [2] = 1 }
+        EquipRemote:FireServer(unpack(args))
+    end
+end)
+
+Button2.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        local args = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args))
+    end
+end)
+
+Button3.MouseButton1Click:Connect(function()
+    isNormal = not isNormal
+    Button3.Text = isNormal and "Normal" or "Special"
+end)
+
+ToggleButton.MouseButton1Click:Connect(function()
+    loopEnabled = not loopEnabled
+    ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+
+    if loopEnabled then
+        coroutine.wrap(runLoop)()
+    end
+end)
+
+local function filterTextBoxInput()
+    local filteredText = ""
+    for i = 1, #TextBox.Text do
+        local char = TextBox.Text:sub(i, i)
+        if char:match("[a-z0-9]") then
+            filteredText = filteredText .. char
+        end
+    end
+    TextBox.Text = filteredText
+end
+
+TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+    filterTextBoxInput()
+end)
