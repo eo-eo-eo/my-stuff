@@ -38,15 +38,28 @@ ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + ver
 ToggleButton.Text = "Enable tower duping(laggy)"
 ToggleButton.Parent = ScreenGui
 
--- New Title Button
-local TitleButton = Instance.new("TextButton")
-TitleButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-TitleButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
-TitleButton.Text = "Title"
-TitleButton.Parent = ScreenGui
+local MorphButton = Instance.new("TextButton")
+MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
+MorphButton.Text = "Morph"
+MorphButton.Parent = ScreenGui
+
+local RainbowButton = Instance.new("TextButton")
+RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 3)
+RainbowButton.Text = "Random Rainbow Title"
+RainbowButton.Parent = ScreenGui
+
+local RandomTowerButton = Instance.new("TextButton")
+RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 4)
+RandomTowerButton.Text = "Random Tower"
+RandomTowerButton.Parent = ScreenGui
 
 local loopEnabled = false
 local isNormal = true
+local rainbowLoopEnabled = false
+local randomTowerLoopEnabled = false
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
@@ -70,7 +83,7 @@ local monsterMapping = {
 }
 
 local function getMonsterId(monsterName)
-    return monsterMapping[monsterName:lower()] or nil
+    return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
 end
 
 local function runLoop(monsterId)
@@ -130,8 +143,7 @@ ToggleButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Title Button Functionality
-TitleButton.MouseButton1Click:Connect(function()
+MorphButton.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(TextBox.Text)
     if monsterId then
         local args = { [1] = monsterId + 1000 }
@@ -139,17 +151,40 @@ TitleButton.MouseButton1Click:Connect(function()
     end
 end)
 
-local function filterTextBoxInput()
-    local filteredText = ""
-    for i = 1, #TextBox.Text do
-        local char = TextBox.Text:sub(i, i)
-        if char:match("[a-z0-9]") then
-            filteredText = filteredText .. char
-        end
-    end
-    TextBox.Text = filteredText
-end
+RainbowButton.MouseButton1Click:Connect(function()
+    rainbowLoopEnabled = not rainbowLoopEnabled
+    RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
 
-TextBox:GetPropertyChangedSignal("Text"):Connect(function()
-    filterTextBoxInput()
+    if rainbowLoopEnabled then
+        coroutine.wrap(function()
+            while rainbowLoopEnabled do
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = math.random(1001, 1052) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = 20 }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+            end
+        end)()
+    end
+end)
+
+RandomTowerButton.MouseButton1Click:Connect(function()
+    randomTowerLoopEnabled = not randomTowerLoopEnabled
+    RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
+
+    if randomTowerLoopEnabled then
+        coroutine.wrap(function()
+            while randomTowerLoopEnabled do
+                local monsterId = math.random(1, 52)
+                fireEquipRemote(monsterId, 1)
+                wait(0.5)
+            end
+        end)()
+    end
 end)
