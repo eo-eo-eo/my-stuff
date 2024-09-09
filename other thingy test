@@ -1,0 +1,164 @@
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local buttonWidth = 200
+local buttonHeight = 50
+local spacing = 10
+
+local function createButton(text)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+    button.Text = text
+    button.Parent = ScreenGui
+    return button
+end
+
+local buttons = {
+    TextBox = Instance.new("TextBox"),
+    EquipButton = createButton("Equip"),
+    UnequipButton = createButton("Unequip"),
+    NormalSpecialButton = createButton("Normal"),
+    TowerDupeButton = createButton("Enable tower duping(laggy)"),
+    MorphButton = createButton("Morph"),
+    RainbowTitleButton = createButton("Random Rainbow Title"),
+    RandomTowerButton = createButton("Random Tower"),
+}
+
+-- Setting TextBox properties
+buttons.TextBox.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+buttons.TextBox.Text = "monsters name here"
+buttons.TextBox.Parent = ScreenGui
+
+-- Function to adjust the position of buttons
+local function adjustButtonPositions()
+    local screenHeight = game.Workspace.CurrentCamera.ViewportSize.Y
+    local totalHeight = (#buttons * buttonHeight) + ((#buttons - 1) * spacing)
+    local startY = (screenHeight - totalHeight) / 2 -- Center the buttons vertically
+
+    for i, button in ipairs(buttons) do
+        button.Position = UDim2.new(0.5, -buttonWidth / 2, 0, startY + (i - 1) * (buttonHeight + spacing))
+    end
+end
+
+adjustButtonPositions()
+
+local loopEnabled = false
+local isNormal = true
+local rainbowLoopEnabled = false
+local randomTowerLoopEnabled = false
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
+local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
+local TitleRemote = ReplicatedStorage:WaitForChild("Title")
+
+local monsterMapping = {
+    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7,
+    snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14,
+    dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19, moldbygg = 20, shyren = 21, vulkin = 22,
+    tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27, finalfroggit = 28,
+    whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34,
+    orangesoul = 35, purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40,
+    maddummy = 41, alphys = 42, glyde = 43, sosorry = 44, memoryhead = 45, endogeny = 46, reaperbird = 47,
+    lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52, rudinn = 501,
+    hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508,
+    clover = 509, starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002,
+    papyrus = 1003, undyne = 1004, muffet = 1005, mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008,
+    mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012, asriel = 1013, kris = 2001, susie = 2002,
+    ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
+}
+
+local function getMonsterId(monsterName)
+    return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
+end
+
+local function fireEquipRemote(monsterId, equipType)
+    if isNormal then
+        EquipRemote:FireServer(monsterId, equipType)
+    else
+        local args = { [1] = monsterId - 1000, [2] = equipType }
+        Equip2Remote:FireServer(unpack(args))
+    end
+end
+
+buttons.EquipButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(buttons.TextBox.Text)
+    if monsterId then
+        fireEquipRemote(monsterId, 1)
+    end
+end)
+
+buttons.UnequipButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(buttons.TextBox.Text)
+    if monsterId then
+        fireEquipRemote(monsterId, 2)
+    end
+end)
+
+buttons.NormalSpecialButton.MouseButton1Click:Connect(function()
+    isNormal = not isNormal
+    buttons.NormalSpecialButton.Text = isNormal and "Normal" or "Special"
+end)
+
+buttons.TowerDupeButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(buttons.TextBox.Text)
+    if monsterId then
+        loopEnabled = not loopEnabled
+        buttons.TowerDupeButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+        
+        if loopEnabled then
+            coroutine.wrap(function()
+                while loopEnabled do
+                    fireEquipRemote(monsterId, 1)
+                    wait(0.5)
+                end
+            end)()
+        end
+    end
+end)
+
+buttons.MorphButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(buttons.TextBox.Text)
+    if monsterId then
+        local args = { [1] = monsterId + 1000 }
+        TitleRemote:FireServer(unpack(args))
+    end
+end)
+
+buttons.RainbowTitleButton.MouseButton1Click:Connect(function()
+    rainbowLoopEnabled = not rainbowLoopEnabled
+    buttons.RainbowTitleButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
+    
+    if rainbowLoopEnabled then
+        coroutine.wrap(function()
+            while rainbowLoopEnabled do
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = math.random(1001, 1052) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+
+                local args = { [1] = 20 }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+            end
+        end)()
+    end
+end)
+
+buttons.RandomTowerButton.MouseButton1Click:Connect(function()
+    randomTowerLoopEnabled = not randomTowerLoopEnabled
+    buttons.RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
+    
+    if randomTowerLoopEnabled then
+        coroutine.wrap(function()
+            while randomTowerLoopEnabled do
+                local monsterId = math.random(1, 52)
+                fireEquipRemote(monsterId, 1)
+                wait(0.5)
+            end
+        end)()
+    end
+end)
