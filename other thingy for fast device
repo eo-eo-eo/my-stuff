@@ -83,7 +83,7 @@ local monsterMapping = {
 }
 
 local function getMonsterId(monsterName)
-    return monsterMapping[monsterName:lower()] or nil
+    return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
 end
 
 local function runLoop(monsterId)
@@ -97,7 +97,7 @@ local function runLoop(monsterId)
         
         local args3 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args3))
-        wait(0.2)
+        wait(0.1)
     end
 end
 
@@ -166,31 +166,7 @@ RainbowButton.MouseButton1Click:Connect(function()
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
 
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-
-                args = { [1] = math.random(1501, 1512) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-
-                args = { [1] = math.random(3002, 3006) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-
-                args = { [1] = math.random(2001, 2013) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-
-                args = { [1] = math.random(1, 25) }
+                local args = { [1] = 20 }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
             end
@@ -205,43 +181,10 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local args = { [1] = math.random(1001, 1052) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                args = { [1] = math.random(1501, 1512) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                args = { [1] = math.random(3002, 3006) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                args = { [1] = math.random(2001, 2013) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-
-                args = { [1] = math.random(1, 25) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
+                local monsterId = math.random(1, 52)
+                fireEquipRemote(monsterId, 1)
+                wait(0.5)
             end
         end)()
     end
-end)
-
-local function filterTextBoxInput()
-    local filteredText = ""
-    for i = 1, #TextBox.Text do
-        local char = TextBox.Text:sub(i, i)
-        if char:match("[A-Z]") then
-            filteredText = filteredText .. char:lower()
-        elseif char:match("[a-z0-9]") then
-            filteredText = filteredText .. char
-        end
-    end
-    TextBox.Text = filteredText
-end
-
-TextBox:GetPropertyChangedSignal("Text"):Connect(function()
-    filterTextBoxInput()
 end)
