@@ -221,53 +221,56 @@ RandomTowerButton.MouseButton1Click:Connect(function()
 end)
 
 -- Make the frame draggable
-local dragToggle = nil
-local dragStart = nil
-local startPos = nil
+local dragToggle = false
+local dragStart = Vector2.new()
+local startPos = UDim2.new()
 
 local function update(input)
     local delta = input.Position - dragStart
     Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
+local function startDrag(input)
+    dragToggle = true
+    dragStart = input.Position
+    startPos = Frame.Position
+end
+
+local function stopDrag()
+    dragToggle = false
+end
+
+local function onInputChanged(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
+        update(input)
+    end
+end
+
 Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragToggle = true
-        dragStart = input.Position
-        startPos = Frame.Position
+        startDrag(input)
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragToggle = false
+                stopDrag()
             end
         end)
     end
 end)
 
-Frame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        update(input)
-    end
-end)
+Frame.InputChanged:Connect(onInputChanged)
 
--- Make the header draggable as well
 Header.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragToggle = true
-        dragStart = input.Position
-        startPos = Frame.Position
+        startDrag(input)
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragToggle = false
+                stopDrag()
             end
         end)
     end
 end)
 
-Header.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        update(input)
-    end
-end)
+Header.InputChanged:Connect(onInputChanged)
 
 -- Create a smaller toggle button for showing/hiding the main GUI
 local ToggleGuiButton = Instance.new("TextButton")
@@ -287,21 +290,22 @@ end
 ToggleGuiButton.MouseButton1Click:Connect(toggleGui)
 
 -- Make the toggle button draggable
-ToggleGuiButton.InputBegan:Connect(function(input)
+local function onToggleButtonInputBegan(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragToggle = true
-        dragStart = input.Position
-        startPos = ToggleGuiButton.Position
+        startDrag(input)
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragToggle = false
+                stopDrag()
             end
         end)
     end
-end)
+end
 
-ToggleGuiButton.InputChanged:Connect(function(input)
+local function onToggleButtonInputChanged(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
         update(input)
     end
-end)
+end
+
+ToggleGuiButton.InputBegan:Connect(onToggleButtonInputBegan)
+ToggleGuiButton.InputChanged:Connect(onToggleButtonInputChanged)
