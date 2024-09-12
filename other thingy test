@@ -11,35 +11,38 @@ local UIScale = Instance.new("UIScale")
 UIScale.Scale = 1
 UIScale.Parent = ScreenGui
 
-local centerX = 0.5
-local centerY = 0.5
-local buttonWidth = 0.1 -- Relative width (10% of screen width)
-local buttonHeight = 0.05 -- Relative height (5% of screen height)
-local spacing = 0.02 -- Relative spacing (2% of screen height)
-local verticalOffset = buttonHeight + spacing
+-- Create a UIGridLayout to organize buttons in a vertical column
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = ScreenGui
+UIListLayout.FillDirection = Enum.FillDirection.Vertical
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout.Padding = UDim.new(0, 10) -- 10 pixels of padding between buttons
 
-local function createButton(name, position, text)
+local buttonWidth = 0.3 -- Relative width (30% of screen width)
+local buttonHeight = 0.05 -- Relative height (5% of screen height)
+
+local function createButton(text)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(buttonWidth, 0, buttonHeight, 0)
-    button.Position = UDim2.new(centerX, position.X, centerY, position.Y)
     button.Text = text
     button.Parent = ScreenGui
     return button
 end
 
 local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.3, 0, buttonHeight, 0)
-TextBox.Position = UDim2.new(centerX, -TextBox.Size.X.Offset / 2, centerY, -buttonHeight - verticalOffset)
+TextBox.Size = UDim2.new(0.4, 0, buttonHeight, 0)
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.2, 0) -- Centered horizontally and positioned near the top
 TextBox.Text = "monsters name here"
 TextBox.Parent = ScreenGui
 
-local Button1 = createButton("Equip", UDim2.new(-0.15 - spacing, 0, -0.5, 0), "Equip")
-local Button2 = createButton("Unequip", UDim2.new(0, 0, -0.5, 0), "Unequip")
-local Button3 = createButton("Normal", UDim2.new(0.15 + spacing, 0, -0.5, 0), "Normal")
-local ToggleButton = createButton("Enable tower duping(laggy)", UDim2.new(-0.15, 0, 0.5 + verticalOffset, 0), "Enable tower duping(laggy)")
-local MorphButton = createButton("Morph", UDim2.new(0, 0, 0.5 + verticalOffset * 2, 0), "Morph")
-local RainbowButton = createButton("Random Rainbow Title", UDim2.new(0, 0, 0.5 + verticalOffset * 3, 0), "Random Rainbow Title")
-local RandomTowerButton = createButton("Random Tower", UDim2.new(0, 0, 0.5 + verticalOffset * 4, 0), "Random Tower")
+local Button1 = createButton("Equip")
+local Button2 = createButton("Unequip")
+local Button3 = createButton("Normal")
+local ToggleButton = createButton("Enable tower duping(laggy)")
+local MorphButton = createButton("Morph")
+local RainbowButton = createButton("Random Rainbow Title")
+local RandomTowerButton = createButton("Random Tower")
 
 local loopEnabled = false
 local isNormal = true
