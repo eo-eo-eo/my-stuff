@@ -1,8 +1,6 @@
--- Create the GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Constants
 local centerX = 0.5
 local centerY = 0.5
 local buttonWidth = 100
@@ -10,44 +8,64 @@ local buttonHeight = 50
 local spacing = 10
 local verticalOffset = buttonHeight + spacing
 
--- Function to create buttons
-local function createButton(name, position, text)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-    button.Position = UDim2.new(centerX, position.X, centerY, position.Y)
-    button.Text = text
-    button.Parent = ScreenGui
-    return button
-end
-
--- Create GUI elements
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0, 200, 0, buttonHeight)
 TextBox.Position = UDim2.new(centerX, -100, centerY, -buttonHeight - verticalOffset)
 TextBox.Text = "monsters name here"
 TextBox.Parent = ScreenGui
 
-local Button1 = createButton("Button1", UDim2.new(centerX, -buttonWidth * 1.5 - spacing, centerY, -buttonHeight / 2), "Equip")
-local Button2 = createButton("Button2", UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2), "Unequip")
-local Button3 = createButton("Button3", UDim2.new(centerX, buttonWidth + spacing - 50, centerY, -buttonHeight / 2), "Normal")
-local ToggleButton = createButton("ToggleButton", UDim2.new(centerX, -100, centerY, buttonHeight / 2 + verticalOffset), "Enable tower duping(laggy)")
-local MorphButton = createButton("MorphButton", UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2), "Morph")
-local RainbowButton = createButton("RainbowButton", UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 3), "Random Rainbow Title")
-local RandomTowerButton = createButton("RandomTowerButton", UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 4), "Random Tower")
+local Button1 = Instance.new("TextButton")
+Button1.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button1.Position = UDim2.new(centerX, -buttonWidth * 1.5 - spacing, centerY, -buttonHeight / 2)
+Button1.Text = "Equip"
+Button1.Parent = ScreenGui
 
--- Variables
+local Button2 = Instance.new("TextButton")
+Button2.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button2.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, -buttonHeight / 2)
+Button2.Text = "Unequip"
+Button2.Parent = ScreenGui
+
+local Button3 = Instance.new("TextButton")
+Button3.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button3.Position = UDim2.new(centerX, buttonWidth + spacing - 50, centerY, -buttonHeight / 2)
+Button3.Text = "Normal"
+Button3.Parent = ScreenGui
+
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0, 200, 0, buttonHeight)
+ToggleButton.Position = UDim2.new(centerX, -100, centerY, buttonHeight / 2 + verticalOffset)
+ToggleButton.Text = "Enable tower duping(laggy)"
+ToggleButton.Parent = ScreenGui
+
+local MorphButton = Instance.new("TextButton")
+MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+MorphButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 2)
+MorphButton.Text = "Morph"
+MorphButton.Parent = ScreenGui
+
+local RainbowButton = Instance.new("TextButton")
+RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RainbowButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 3)
+RainbowButton.Text = "Random Rainbow Title"
+RainbowButton.Parent = ScreenGui
+
+local RandomTowerButton = Instance.new("TextButton")
+RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RandomTowerButton.Position = UDim2.new(centerX, -buttonWidth / 2, centerY, buttonHeight / 2 + verticalOffset * 4)
+RandomTowerButton.Text = "Random Tower"
+RandomTowerButton.Parent = ScreenGui
+
 local loopEnabled = false
 local isNormal = true
 local rainbowLoopEnabled = false
 local randomTowerLoopEnabled = false
 
--- Remote references
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
 
--- Monster mapping
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
     snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14, 
@@ -64,21 +82,20 @@ local monsterMapping = {
     ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
 }
 
--- Utility functions
 local function getMonsterId(monsterName)
-    return monsterMapping[monsterName:lower()] or nil
+    return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
 end
 
 local function runLoop(monsterId)
     while loopEnabled do
-        local args1 = { monsterId, 1 }
+        local args1 = { [1] = monsterId, [2] = 1 }
         EquipRemote:FireServer(unpack(args1))
         wait(0)
         
-        local args2 = { monsterId, 2 }
+        local args2 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args2))
         
-        local args3 = { monsterId, 2 }
+        local args3 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args3))
         wait(0.1)
     end
@@ -88,11 +105,11 @@ local function fireEquipRemote(monsterId, equipType)
     if isNormal then
         EquipRemote:FireServer(monsterId, equipType)
     else
-        Equip2Remote:FireServer(monsterId - 1000, equipType)
+        local args = { [1] = monsterId - 1000, [2] = equipType }
+        Equip2Remote:FireServer(unpack(args))
     end
 end
 
--- Button handlers
 Button1.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(TextBox.Text)
     if monsterId then
@@ -117,6 +134,7 @@ ToggleButton.MouseButton1Click:Connect(function()
     if monsterId then
         loopEnabled = not loopEnabled
         ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+
         if loopEnabled then
             coroutine.wrap(function()
                 runLoop(monsterId)
@@ -128,7 +146,7 @@ end)
 MorphButton.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(TextBox.Text)
     if monsterId then
-        local args = { monsterId + 1000 }
+        local args = { [1] = monsterId + 1000 }
         TitleRemote:FireServer(unpack(args))
     end
 end)
@@ -136,34 +154,48 @@ end)
 RainbowButton.MouseButton1Click:Connect(function()
     rainbowLoopEnabled = not rainbowLoopEnabled
     RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
+
     if rainbowLoopEnabled then
         coroutine.wrap(function()
             while rainbowLoopEnabled do
-                local args = { 19 }
-                TitleRemote:FireServer(unpack(args))
-                local titleId = math.random(1001, 1052)
-                local args = { titleId }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
+                -- First part of the loop
+                local args = { [1] = 19 }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 
-                titleId = math.random(1501, 1512)
-                local args = { titleId }
-                TitleRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(1001, 1052) }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 wait(0)
+
+                -- Second part of the loop
+                local args = { [1] = 19 }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 
-                titleId = math.random(3002, 3006)
-                local args = { titleId }
-                TitleRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(1501, 1512) }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 wait(0)
+
+                -- Third part of the loop
+                local args = { [1] = 19 }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 
-                titleId = math.random(2001, 2013)
-                local args = { titleId }
-                TitleRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(3002, 3006) }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 wait(0)
+
+                -- Fourth part of the loop
+                local args = { [1] = 19 }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 
-                titleId = math.random(1, 25)
-                local args = { titleId }
-                TitleRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(2001, 2013) }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
+                wait(0)
+
+                -- Fifth part of the loop
+                local args = { [1] = 19 }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
+                
+                local args = { [1] = math.random(1, 25) }
+                game:GetService("ReplicatedStorage").Title:FireServer(unpack(args))
                 wait(0)
             end
         end)()
@@ -173,14 +205,14 @@ end)
 RandomTowerButton.MouseButton1Click:Connect(function()
     randomTowerLoopEnabled = not randomTowerLoopEnabled
     RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
+
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local monsterId = math.random(1, 52)
-                fireEquipRemote(monsterId, 1)
-                wait(0.5)
+                local args1 = { [1] = math.random(1, 25), [2] = 1 }
+                EquipRemote:FireServer(unpack(args1))
+                wait(0.1)
             end
         end)()
     end
 end)
-
