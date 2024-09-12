@@ -210,21 +210,30 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Make the frame draggable
+-- Create another draggable button
+local DraggableButton = Instance.new("TextButton")
+DraggableButton.Size = UDim2.new(0.2, 0, 0.1, 0) -- Adjust size as needed
+DraggableButton.Position = UDim2.new(0.8, -DraggableButton.Size.X.Offset / 2, 0.8, -DraggableButton.Size.Y.Offset / 2) -- Position on the screen
+DraggableButton.Text = "Draggable Button"
+DraggableButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255) -- Blue background
+DraggableButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+DraggableButton.Parent = ScreenGui
+
+-- Make the draggable button draggable
 local dragToggle = nil
 local dragStart = nil
 local startPos = nil
 
 local function update(input)
     local delta = input.Position - dragStart
-    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    DraggableButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-Frame.InputBegan:Connect(function(input)
+DraggableButton.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragToggle = true
         dragStart = input.Position
-        startPos = Frame.Position
+        startPos = DraggableButton.Position
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragToggle = false
@@ -233,7 +242,7 @@ Frame.InputBegan:Connect(function(input)
     end
 end)
 
-Frame.InputChanged:Connect(function(input)
+DraggableButton.InputChanged:Connect(function(input)
     if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragToggle then
         update(input)
     end
