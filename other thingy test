@@ -12,6 +12,7 @@ Frame.Parent = ScreenGui
 -- Create a header for the frame
 local Header = Instance.new("Frame")
 Header.Size = UDim2.new(1, 0, 0.1, 0) -- Header size (full width, 10% height)
+Header.Position = UDim2.new(0, 0, 0, 0) -- Positioned at the top of the frame
 Header.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the header
 Header.BackgroundTransparency = 0.7 -- Semi-transparent
 Header.Parent = Frame
@@ -25,7 +26,7 @@ HeaderLabel.BackgroundTransparency = 1
 HeaderLabel.TextScaled = true
 HeaderLabel.Parent = Header
 
--- Create a UIAspectRatioConstraint to maintain aspect ratio of the frame
+-- Create and configure a UIAspectRatioConstraint to maintain aspect ratio of the frame
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
 AspectRatio.AspectRatio = 4 / 3 -- Adjust as needed
 AspectRatio.Parent = Frame
@@ -51,7 +52,7 @@ end
 
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0.9, 0, 0.1, 0) -- Slightly larger to fit well inside the frame
-TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.05, 0) -- Positioned at the top of the frame
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.12, 0) -- Positioned below the header
 TextBox.Text = "monsters name here"
 TextBox.Parent = Frame
 
@@ -219,31 +220,14 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Create a smaller toggle button for showing/hiding the main GUI
-local ToggleGuiButton = Instance.new("TextButton")
-ToggleGuiButton.Size = UDim2.new(0.1, 0, 0.05, 0) -- Smaller size
-ToggleGuiButton.Position = UDim2.new(0.05, 0, 0.05, 0) -- Position at top-left
-ToggleGuiButton.Text = "+"
-ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
-ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-ToggleGuiButton.Parent = ScreenGui
-
--- Function to update the GUI visibility
-local function toggleGui()
-    Frame.Visible = not Frame.Visible
-    ToggleGuiButton.Text = Frame.Visible and "-" or "+"
-end
-
-ToggleGuiButton.MouseButton1Click:Connect(toggleGui)
-
--- Make the frame and the toggle button draggable
+-- Make the frame draggable
 local dragToggle = nil
 local dragStart = nil
 local startPos = nil
 
-local function update(input, target)
+local function update(input)
     local delta = input.Position - dragStart
-    target.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
 Frame.InputBegan:Connect(function(input)
@@ -261,10 +245,48 @@ end)
 
 Frame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        update(input, Frame)
+        update(input)
     end
 end)
 
+-- Make the header draggable as well
+Header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragToggle = true
+        dragStart = input.Position
+        startPos = Frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragToggle = false
+            end
+        end)
+    end
+end)
+
+Header.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
+        update(input)
+    end
+end)
+
+-- Create a smaller toggle button for showing/hiding the main GUI
+local ToggleGuiButton = Instance.new("TextButton")
+ToggleGuiButton.Size = UDim2.new(0.1, 0, 0.05, 0) -- Smaller size
+ToggleGuiButton.Position = UDim2.new(0.05, 0, 0.05, 0) -- Position at top-left
+ToggleGuiButton.Text = "+"
+ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
+ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+ToggleGuiButton.Parent = ScreenGui
+
+-- Function to update the GUI visibility
+local function toggleGui()
+    Frame.Visible = not Frame.Visible
+    ToggleGuiButton.Text = Frame.Visible and "-" or "+"
+end
+
+ToggleGuiButton.MouseButton1Click:Connect(toggleGui)
+
+-- Make the toggle button draggable
 ToggleGuiButton.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragToggle = true
@@ -280,6 +302,6 @@ end)
 
 ToggleGuiButton.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        update(input, ToggleGuiButton)
+        update(input)
     end
 end)
