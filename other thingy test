@@ -1,96 +1,234 @@
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local centerX = 0.5
-local centerY = 0.5
-local buttonWidth = 100
-local buttonHeight = 50
-local spacing = 10
-local verticalOffset = buttonHeight + spacing
-local framePadding = 20  -- Added padding for easier dragging
-
+-- Create a draggable frame
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, buttonWidth + 2 * framePadding, 0, (buttonHeight + spacing) * 6 + framePadding)
-Frame.Position = UDim2.new(centerX, -((buttonWidth + 2 * framePadding) / 2), centerY, -((buttonHeight + spacing) * 6 / 2) - framePadding / 2)
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BackgroundTransparency = 0.5
+Frame.Size = UDim2.new(0.4, 0, 0.8, 0) -- Relative size (40% width, 80% height)
+Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2) -- Centered on screen
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the frame
+Frame.BackgroundTransparency = 0.5 -- Semi-transparent
 Frame.Parent = ScreenGui
 
+-- Create a UIAspectRatioConstraint to maintain aspect ratio of the frame
+local AspectRatio = Instance.new("UIAspectRatioConstraint")
+AspectRatio.AspectRatio = 4 / 3 -- Adjust as needed
+AspectRatio.Parent = Frame
+
+-- Create and configure a UIListLayout to arrange buttons vertically
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = Frame
+UIListLayout.FillDirection = Enum.FillDirection.Vertical
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+UIListLayout.Padding = UDim.new(0, 10) -- 10 pixels of padding between buttons
+
+local buttonWidth = 0.9 -- Relative width (90% of frame width)
+local buttonHeight = 0.08 -- Relative height (8% of frame height)
+
+local function createButton(text)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(buttonWidth, 0, buttonHeight, 0)
+    button.Text = text
+    button.Parent = Frame
+    return button
+end
+
 local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-TextBox.Position = UDim2.new(0.5, -100, 0, -buttonHeight - verticalOffset)
+TextBox.Size = UDim2.new(0.9, 0, 0.1, 0) -- Slightly larger to fit well inside the frame
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.05, 0) -- Positioned at the top of the frame
 TextBox.Text = "monsters name here"
 TextBox.Parent = Frame
 
-local Button1 = Instance.new("TextButton")
-Button1.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button1.Position = UDim2.new(0.5, -buttonWidth * 1.5 - spacing, 0, -buttonHeight / 2)
-Button1.Text = "Equip"
-Button1.Parent = Frame
+local Button1 = createButton("Equip")
+local Button2 = createButton("Unequip")
+local Button3 = createButton("Normal")
+local ToggleButton = createButton("Enable tower duping(laggy)")
+local MorphButton = createButton("Morph")
+local RainbowButton = createButton("Random Rainbow Title")
+local RandomTowerButton = createButton("Random Tower")
 
-local Button2 = Instance.new("TextButton")
-Button2.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button2.Position = UDim2.new(0.5, -buttonWidth / 2, 0, -buttonHeight / 2)
-Button2.Text = "Unequip"
-Button2.Parent = Frame
+local loopEnabled = false
+local isNormal = true
+local rainbowLoopEnabled = false
+local randomTowerLoopEnabled = false
 
-local Button3 = Instance.new("TextButton")
-Button3.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-Button3.Position = UDim2.new(0.5, buttonWidth + spacing - 50, 0, -buttonHeight / 2)
-Button3.Text = "Normal"
-Button3.Parent = Frame
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
+local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
+local TitleRemote = ReplicatedStorage:WaitForChild("Title")
 
-local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-ToggleButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset)
-ToggleButton.Text = "Enable tower duping(laggy)"
-ToggleButton.Parent = Frame
+local monsterMapping = {
+    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
+    snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14, 
+    dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19, moldbygg = 20, shyren = 21, vulkin = 22, 
+    tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27, finalfroggit = 28, 
+    whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34, 
+    orangesoul = 35, purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40, 
+    maddummy = 41, alphys = 42, glyde = 43, sosorry = 44, memoryhead = 45, endogeny = 46, reaperbird = 47, 
+    lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52, rudinn = 501, 
+    hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508, 
+    clover = 509, starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002, 
+    papyrus = 1003, undyne = 1004, muffet = 1005, mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008, 
+    mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012, asriel = 1013, kris = 2001, susie = 2002, 
+    ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
+}
 
-local MorphButton = Instance.new("TextButton")
-MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-MorphButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset * 2)
-MorphButton.Text = "Morph"
-MorphButton.Parent = Frame
+local function getMonsterId(monsterName)
+    return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
+end
 
-local RainbowButton = Instance.new("TextButton")
-RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-RainbowButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset * 3)
-RainbowButton.Text = "Random Rainbow Title"
-RainbowButton.Parent = Frame
+local function runLoop(monsterId)
+    while loopEnabled do
+        local args1 = { [1] = monsterId, [2] = 1 }
+        EquipRemote:FireServer(unpack(args1))
+        wait(0)
+        
+        local args2 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args2))
+        
+        local args3 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args3))
+        wait(0.1)
+    end
+end
 
-local RandomTowerButton = Instance.new("TextButton")
-RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
-RandomTowerButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset * 4)
-RandomTowerButton.Text = "Random Tower"
-RandomTowerButton.Parent = Frame
+local function fireEquipRemote(monsterId, equipType)
+    if isNormal then
+        EquipRemote:FireServer(monsterId, equipType)
+    else
+        local args = { [1] = monsterId - 1000, [2] = equipType }
+        Equip2Remote:FireServer(unpack(args))
+    end
+end
 
--- Dragging functionality
-local dragInput, dragStart, startPos
+Button1.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        fireEquipRemote(monsterId, 1)
+    end
+end)
 
-local function updateDrag(input)
+Button2.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        fireEquipRemote(monsterId, 2)
+    end
+end)
+
+Button3.MouseButton1Click:Connect(function()
+    isNormal = not isNormal
+    Button3.Text = isNormal and "Normal" or "Special"
+end)
+
+ToggleButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        loopEnabled = not loopEnabled
+        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+
+        if loopEnabled then
+            coroutine.wrap(function()
+                runLoop(monsterId)
+            end)()
+        end
+    end
+end)
+
+MorphButton.MouseButton1Click:Connect(function()
+    local monsterId = getMonsterId(TextBox.Text)
+    if monsterId then
+        local args = { [1] = monsterId + 1000 }
+        TitleRemote:FireServer(unpack(args))
+    end
+end)
+
+RainbowButton.MouseButton1Click:Connect(function()
+    rainbowLoopEnabled = not rainbowLoopEnabled
+    RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
+
+    if rainbowLoopEnabled then
+        coroutine.wrap(function()
+            while rainbowLoopEnabled do
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                
+                local args = { [1] = math.random(1001, 1052) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+                
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                
+                local args = { [1] = math.random(1501, 1512) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+                
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                
+                local args = { [1] = math.random(3002, 3006) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+                
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                
+                local args = { [1] = math.random(2001, 2013) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+                
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                
+                local args = { [1] = math.random(1, 25) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+            end
+        end)()
+    end
+end)
+
+RandomTowerButton.MouseButton1Click:Connect(function()
+    randomTowerLoopEnabled = not randomTowerLoopEnabled
+    RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
+
+    if randomTowerLoopEnabled then
+        coroutine.wrap(function()
+            while randomTowerLoopEnabled do
+                local monsterId = math.random(1, 52)
+                fireEquipRemote(monsterId, 1)
+                wait(0.2)
+            end
+        end)()
+    end
+end)
+
+-- Make the frame draggable for both mouse and touch
+local dragToggle = nil
+local dragStart = nil
+local startPos = nil
+
+local function update(input)
     local delta = input.Position - dragStart
     Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-local function onInputBegan(input)
+Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
+        dragToggle = true
         dragStart = input.Position
         startPos = Frame.Position
-        
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragInput = nil
+                dragToggle = false
             end
         end)
     end
-end
+end)
 
-local function onInputChanged(input)
-    if input == dragInput then
-        updateDrag(input)
+Frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle or 
+       input.UserInputType == Enum.UserInputType.Touch and dragToggle then
+        update(input)
     end
-end
-
-Frame.InputBegan:Connect(onInputBegan)
-Frame.InputChanged:Connect(onInputChanged)
+end)
