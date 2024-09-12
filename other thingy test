@@ -1,40 +1,43 @@
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Create and configure a UI aspect ratio for mobile compatibility
+-- Create a draggable frame
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0.4, 0, 0.8, 0) -- Relative size (40% width, 80% height)
+Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2) -- Centered on screen
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the frame
+Frame.BackgroundTransparency = 0.5 -- Semi-transparent
+Frame.Parent = ScreenGui
+
+-- Create a UIAspectRatioConstraint to maintain aspect ratio of the frame
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
-AspectRatio.AspectRatio = 16 / 9 -- Adjust as needed for your design
-AspectRatio.Parent = ScreenGui
+AspectRatio.AspectRatio = 4 / 3 -- Adjust as needed
+AspectRatio.Parent = Frame
 
--- Create a UIScale object for scaling UI elements based on screen size
-local UIScale = Instance.new("UIScale")
-UIScale.Scale = 1
-UIScale.Parent = ScreenGui
-
--- Create a UIGridLayout to organize buttons in a vertical column
+-- Create and configure a UIListLayout to arrange buttons vertically
 local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Parent = ScreenGui
+UIListLayout.Parent = Frame
 UIListLayout.FillDirection = Enum.FillDirection.Vertical
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 UIListLayout.Padding = UDim.new(0, 10) -- 10 pixels of padding between buttons
 
-local buttonWidth = 0.3 -- Relative width (30% of screen width)
-local buttonHeight = 0.05 -- Relative height (5% of screen height)
+local buttonWidth = 0.9 -- Relative width (90% of frame width)
+local buttonHeight = 0.08 -- Relative height (8% of frame height)
 
 local function createButton(text)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(buttonWidth, 0, buttonHeight, 0)
     button.Text = text
-    button.Parent = ScreenGui
+    button.Parent = Frame
     return button
 end
 
 local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.4, 0, buttonHeight, 0)
-TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.2, 0) -- Centered horizontally and positioned near the top
+TextBox.Size = UDim2.new(0.9, 0, 0.1, 0) -- Slightly larger to fit well inside the frame
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.05, 0) -- Positioned at the top of the frame
 TextBox.Text = "monsters name here"
-TextBox.Parent = ScreenGui
+TextBox.Parent = Frame
 
 local Button1 = createButton("Equip")
 local Button2 = createButton("Unequip")
@@ -197,5 +200,34 @@ RandomTowerButton.MouseButton1Click:Connect(function()
                 wait(0.2)
             end
         end)()
+    end
+end)
+
+-- Make the frame draggable
+local dragToggle = nil
+local dragStart = nil
+local startPos = nil
+
+local function update(input)
+    local delta = input.Position - dragStart
+    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+Frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragToggle = true
+        dragStart = input.Position
+        startPos = Frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragToggle = false
+            end
+        end)
+    end
+end)
+
+Frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
+        update(input)
     end
 end)
