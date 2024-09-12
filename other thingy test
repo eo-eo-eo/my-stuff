@@ -7,99 +7,90 @@ local buttonWidth = 100
 local buttonHeight = 50
 local spacing = 10
 local verticalOffset = buttonHeight + spacing
+local framePadding = 20  -- Added padding for easier dragging
 
--- Create a frame to hold all the buttons
-local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 220, 0, buttonHeight * 7 + spacing * 6)  -- Slightly larger frame
-MainFrame.Position = UDim2.new(centerX, -110, centerY, -buttonHeight * 3.5 - spacing * 3)  -- Centered
-MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-MainFrame.BackgroundTransparency = 0.5
-MainFrame.Parent = ScreenGui
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, buttonWidth + 2 * framePadding, 0, (buttonHeight + spacing) * 6 + framePadding)
+Frame.Position = UDim2.new(centerX, -((buttonWidth + 2 * framePadding) / 2), centerY, -((buttonHeight + spacing) * 6 / 2) - framePadding / 2)
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundTransparency = 0.5
+Frame.Parent = ScreenGui
 
--- Add UIListLayout to manage button positioning
-local Layout = Instance.new("UIListLayout")
-Layout.Parent = MainFrame
-Layout.FillDirection = Enum.FillDirection.Vertical
-Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-Layout.Padding = UDim.new(0, spacing)
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+TextBox.Position = UDim2.new(0.5, -100, 0, -buttonHeight - verticalOffset)
+TextBox.Text = "monsters name here"
+TextBox.Parent = Frame
 
--- Create a frame to drag
-local DragFrame = Instance.new("Frame")
-DragFrame.Size = UDim2.new(1, 0, 1, 0) -- Full size of the MainFrame
-DragFrame.BackgroundTransparency = 1
-DragFrame.Parent = MainFrame
-
--- Add UIListLayout to manage button positioning
-local Layout = Instance.new("UIListLayout")
-Layout.Parent = MainFrame
-Layout.FillDirection = Enum.FillDirection.Vertical
-Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-Layout.Padding = UDim.new(0, spacing)
-
--- Make the frame draggable
-local dragging = false
-local dragInput, dragStart, startPos
-
-local function update(input)
-    local delta = input.Position - dragStart
-    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-DragFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-DragFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        if dragging then
-            update(input)
-        end
-    end
-end)
-
--- Create buttons
 local Button1 = Instance.new("TextButton")
 Button1.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button1.Position = UDim2.new(0.5, -buttonWidth * 1.5 - spacing, 0, -buttonHeight / 2)
 Button1.Text = "Equip"
-Button1.Parent = MainFrame
+Button1.Parent = Frame
 
 local Button2 = Instance.new("TextButton")
 Button2.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button2.Position = UDim2.new(0.5, -buttonWidth / 2, 0, -buttonHeight / 2)
 Button2.Text = "Unequip"
-Button2.Parent = MainFrame
+Button2.Parent = Frame
 
 local Button3 = Instance.new("TextButton")
 Button3.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+Button3.Position = UDim2.new(0.5, buttonWidth + spacing - 50, 0, -buttonHeight / 2)
 Button3.Text = "Normal"
-Button3.Parent = MainFrame
+Button3.Parent = Frame
 
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+ToggleButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset)
 ToggleButton.Text = "Enable tower duping(laggy)"
-ToggleButton.Parent = MainFrame
+ToggleButton.Parent = Frame
 
 local MorphButton = Instance.new("TextButton")
 MorphButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+MorphButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset * 2)
 MorphButton.Text = "Morph"
-MorphButton.Parent = MainFrame
+MorphButton.Parent = Frame
 
 local RainbowButton = Instance.new("TextButton")
 RainbowButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RainbowButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset * 3)
 RainbowButton.Text = "Random Rainbow Title"
-RainbowButton.Parent = MainFrame
+RainbowButton.Parent = Frame
 
 local RandomTowerButton = Instance.new("TextButton")
 RandomTowerButton.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+RandomTowerButton.Position = UDim2.new(0.5, -buttonWidth / 2, 0, buttonHeight / 2 + verticalOffset * 4)
 RandomTowerButton.Text = "Random Tower"
-RandomTowerButton.Parent = MainFrame
+RandomTowerButton.Parent = Frame
 
--- Adjust the rest of your existing code for functionality here...
+-- Dragging functionality
+local dragInput, dragStart, startPos
+
+local function updateDrag(input)
+    local delta = input.Position - dragStart
+    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+local function onInputBegan(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+        dragStart = input.Position
+        startPos = Frame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragInput = nil
+            end
+        end)
+    end
+end
+
+local function onInputChanged(input)
+    if input == dragInput then
+        updateDrag(input)
+    end
+end
+
+Frame.InputBegan:Connect(onInputBegan)
+Frame.InputChanged:Connect(onInputChanged)
