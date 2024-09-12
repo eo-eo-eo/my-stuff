@@ -9,6 +9,22 @@ Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the fra
 Frame.BackgroundTransparency = 0.5 -- Semi-transparent
 Frame.Parent = ScreenGui
 
+-- Create a header for the frame
+local Header = Instance.new("Frame")
+Header.Size = UDim2.new(1, 0, 0.1, 0) -- Header size (full width, 10% height)
+Header.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the header
+Header.BackgroundTransparency = 0.7 -- Semi-transparent
+Header.Parent = Frame
+
+-- Create a text label for the header
+local HeaderLabel = Instance.new("TextLabel")
+HeaderLabel.Size = UDim2.new(1, 0, 1, 0)
+HeaderLabel.Text = "GUI Header"
+HeaderLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+HeaderLabel.BackgroundTransparency = 1
+HeaderLabel.TextScaled = true
+HeaderLabel.Parent = Header
+
 -- Create a UIAspectRatioConstraint to maintain aspect ratio of the frame
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
 AspectRatio.AspectRatio = 4 / 3 -- Adjust as needed
@@ -220,19 +236,14 @@ end
 
 ToggleGuiButton.MouseButton1Click:Connect(toggleGui)
 
--- Make the frame draggable
+-- Make the frame and the toggle button draggable
 local dragToggle = nil
 local dragStart = nil
 local startPos = nil
 
-local function update(input)
+local function update(input, target)
     local delta = input.Position - dragStart
-    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-local function updateToggleGui(input)
-    local delta = input.Position - dragStart
-    ToggleGuiButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    target.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
 Frame.InputBegan:Connect(function(input)
@@ -250,7 +261,7 @@ end)
 
 Frame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        update(input)
+        update(input, Frame)
     end
 end)
 
@@ -269,6 +280,6 @@ end)
 
 ToggleGuiButton.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        updateToggleGui(input)
+        update(input, ToggleGuiButton)
     end
 end)
