@@ -158,7 +158,7 @@ RainbowButton.MouseButton1Click:Connect(function()
     if rainbowLoopEnabled then
         coroutine.wrap(function()
             while rainbowLoopEnabled do
-              local args = {
+             local args = {
     [1] = 19
 }
 
