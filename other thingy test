@@ -9,24 +9,7 @@ Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the fra
 Frame.BackgroundTransparency = 0.5 -- Semi-transparent
 Frame.Parent = ScreenGui
 
--- Create a header for the frame
-local Header = Instance.new("Frame")
-Header.Size = UDim2.new(1, 0, 0.1, 0) -- Header size (full width, 10% height)
-Header.Position = UDim2.new(0, 0, 0, 0) -- Positioned at the top of the frame
-Header.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background for the header
-Header.BackgroundTransparency = 0.7 -- Semi-transparent
-Header.Parent = Frame
-
--- Create a text label for the header
-local HeaderLabel = Instance.new("TextLabel")
-HeaderLabel.Size = UDim2.new(1, 0, 1, 0)
-HeaderLabel.Text = "GUI Header"
-HeaderLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-HeaderLabel.BackgroundTransparency = 1
-HeaderLabel.TextScaled = true
-HeaderLabel.Parent = Header
-
--- Create and configure a UIAspectRatioConstraint to maintain aspect ratio of the frame
+-- Create a UIAspectRatioConstraint to maintain aspect ratio of the frame
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
 AspectRatio.AspectRatio = 4 / 3 -- Adjust as needed
 AspectRatio.Parent = Frame
@@ -52,7 +35,7 @@ end
 
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0.9, 0, 0.1, 0) -- Slightly larger to fit well inside the frame
-TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.12, 0) -- Positioned below the header
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.05, 0) -- Positioned at the top of the frame
 TextBox.Text = "monsters name here"
 TextBox.Parent = Frame
 
@@ -221,91 +204,30 @@ RandomTowerButton.MouseButton1Click:Connect(function()
 end)
 
 -- Make the frame draggable
-local dragToggle = false
-local dragStart = Vector2.new()
-local startPos = UDim2.new()
+local dragToggle = nil
+local dragStart = nil
+local startPos = nil
 
 local function update(input)
     local delta = input.Position - dragStart
     Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-local function startDrag(input)
-    dragToggle = true
-    dragStart = input.Position
-    startPos = Frame.Position
-end
-
-local function stopDrag()
-    dragToggle = false
-end
-
-local function onInputChanged(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
-        update(input)
-    end
-end
-
 Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        startDrag(input)
+        dragToggle = true
+        dragStart = input.Position
+        startPos = Frame.Position
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                stopDrag()
+                dragToggle = false
             end
         end)
     end
 end)
 
-Frame.InputChanged:Connect(onInputChanged)
-
-Header.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        startDrag(input)
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                stopDrag()
-            end
-        end)
-    end
-end)
-
-Header.InputChanged:Connect(onInputChanged)
-
--- Create a smaller toggle button for showing/hiding the main GUI
-local ToggleGuiButton = Instance.new("TextButton")
-ToggleGuiButton.Size = UDim2.new(0.1, 0, 0.05, 0) -- Smaller size
-ToggleGuiButton.Position = UDim2.new(0.05, 0, 0.05, 0) -- Position at top-left
-ToggleGuiButton.Text = "+"
-ToggleGuiButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Black background
-ToggleGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-ToggleGuiButton.Parent = ScreenGui
-
--- Function to update the GUI visibility
-local function toggleGui()
-    Frame.Visible = not Frame.Visible
-    ToggleGuiButton.Text = Frame.Visible and "-" or "+"
-end
-
-ToggleGuiButton.MouseButton1Click:Connect(toggleGui)
-
--- Make the toggle button draggable
-local function onToggleButtonInputBegan(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        startDrag(input)
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                stopDrag()
-            end
-        end)
-    end
-end
-
-local function onToggleButtonInputChanged(input)
+Frame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
         update(input)
     end
-end
-
-ToggleGuiButton.InputBegan:Connect(onToggleButtonInputBegan)
-ToggleGuiButton.InputChanged:Connect(onToggleButtonInputChanged)
+end)
