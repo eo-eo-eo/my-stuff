@@ -33,9 +33,16 @@ local function createButton(text)
     return button
 end
 
+-- Create a header for dragging
+local Header = Instance.new("Frame")
+Header.Size = UDim2.new(1, 0, 0.1, 0) -- Header size (full width, 10% height of the frame)
+Header.Position = UDim2.new(0, 0, 0, 0) -- Positioned at the top of the frame
+Header.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Dark gray background for the header
+Header.Parent = Frame
+
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0.9, 0, 0.1, 0) -- Slightly larger to fit well inside the frame
-TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.05, 0) -- Positioned at the top of the frame
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.12, 0) -- Positioned below the header
 TextBox.Text = "monsters name here"
 TextBox.Parent = Frame
 
@@ -203,7 +210,7 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Make the frame draggable
+-- Make the header draggable
 local dragToggle = nil
 local dragStart = nil
 local startPos = nil
@@ -213,8 +220,8 @@ local function update(input)
     Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-Frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+Header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragToggle = true
         dragStart = input.Position
         startPos = Frame.Position
@@ -226,8 +233,8 @@ Frame.InputBegan:Connect(function(input)
     end
 end)
 
-Frame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement and dragToggle then
+Header.InputChanged:Connect(function(input)
+    if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragToggle then
         update(input)
     end
 end)
