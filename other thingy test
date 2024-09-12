@@ -210,7 +210,7 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Make the header draggable
+-- Make the frame draggable
 local dragToggle = nil
 local dragStart = nil
 local startPos = nil
@@ -220,7 +220,7 @@ local function update(input)
     Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-Header.InputBegan:Connect(function(input)
+Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragToggle = true
         dragStart = input.Position
@@ -233,7 +233,7 @@ Header.InputBegan:Connect(function(input)
     end
 end)
 
-Header.InputChanged:Connect(function(input)
+Frame.InputChanged:Connect(function(input)
     if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragToggle then
         update(input)
     end
