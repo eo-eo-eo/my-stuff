@@ -1,0 +1,23 @@
+-- Create a ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create a TextBox
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(0, 200, 0, 50) -- width and height
+textBox.Position = UDim2.new(0.5, -100, 0.4, 0) -- center on the screen
+textBox.PlaceholderText = "Enter something"
+textBox.Parent = screenGui
+
+-- Create a Button
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 100, 0, 50) -- width and height
+button.Position = UDim2.new(0.5, -50, 0.5, 0) -- center below the TextBox
+button.Text = "Enter Key"
+button.Parent = screenGui
+
+-- Button click event
+button.MouseButton1Click:Connect(function()
+    local enteredText = textBox.Text
+    print("Entered text: " .. enteredText)
+end)
