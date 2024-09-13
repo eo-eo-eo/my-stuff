@@ -1,23 +1,88 @@
+-- List of valid keys
+local validKeys = {
+    "WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
+    "HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB",
+    "ZxTM3jSWmmx56jgu5p8fZdtZyzREKXrg5wFULxLoJjf9kYp3ZN5rTnsk2vao24yzy6bRXkshcpXN6zesxY5GPKUM2xHv8DRxsCxGXpCpZqHnzgWpbJ3rKv2XAk6Z9spa",
+    "3ezrk6MDonPQrUi2SxidABTMDMot4D3e9UotL2akxdEjRr2C3mthDferN5kc4cgCporG4AbS6N6SHAx5Myy2puHvoo5pndEjRZzAhWebhLKWP2SpdahP83XzUrB43pHW",
+    "5CXQLe33V6ipWpLs2Z85MVp7ddFxuzKvKS93spnhJdqpctBzN83bKY3kkeE3L9WFygshvHAeDWARWJi643zefARvskvhcqcEowrH2DiJp29ouQ4dfaNt6QG8azseyuMf",
+    "rvuFZ7rSC8D5P8LnBNSPL8Z98UTNeDBgNuqx6jmgXLTquerHc3niMkdYadaxnXwwKKBdiT8nFPd6Eb6BXiSLZrmbgYV6PSZZbVTzns7j4yCSBMoYHajACTCYRTCNNaBe",
+    "bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"
+}
+
+-- Create a table to track redeemed keys
+local redeemedKeys = {}
+
 -- Create a ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Create a TextBox
 local textBox = Instance.new("TextBox")
-textBox.Size = UDim2.new(0, 200, 0, 50) -- width and height
-textBox.Position = UDim2.new(0.5, -100, 0.4, 0) -- center on the screen
-textBox.PlaceholderText = "Enter something"
+textBox.Size = UDim2.new(0, 200, 0, 50)
+textBox.Position = UDim2.new(0.5, -100, 0.4, 0)
+textBox.PlaceholderText = "Enter key"
 textBox.Parent = screenGui
 
--- Create a Button
-local button = Instance.new("TextButton")
-button.Size = UDim2.new(0, 100, 0, 50) -- width and height
-button.Position = UDim2.new(0.5, -50, 0.5, 0) -- center below the TextBox
-button.Text = "Enter Key"
-button.Parent = screenGui
+-- Create an "Enter Key" Button
+local enterButton = Instance.new("TextButton")
+enterButton.Size = UDim2.new(0, 100, 0, 50)
+enterButton.Position = UDim2.new(0.5, -50, 0.5, 0)
+enterButton.Text = "Enter Key"
+enterButton.Parent = screenGui
+
+-- Function to check if the entered text is a valid key
+local function isValidKey(inputText, player)
+    for _, key in pairs(validKeys) do
+        if inputText == key then
+            -- Check if the key has already been redeemed
+            if redeemedKeys[key] then
+                if redeemedKeys[key] == player then
+                    return true -- Player has already redeemed this key
+                else
+                    return false, "This key has already been redeemed by another player."
+                end
+            else
+                -- Mark the key as redeemed by this player
+                redeemedKeys[key] = player
+                return true
+            end
+        end
+    end
+    return false, "Invalid key."
+end
+
+-- Function to create two new buttons
+local function createNewButtons()
+    -- Create the first new button
+    local newButton1 = Instance.new("TextButton")
+    newButton1.Size = UDim2.new(0, 100, 0, 50)
+    newButton1.Position = UDim2.new(0.5, -150, 0.5, 0)
+    newButton1.Text = "New Button 1"
+    newButton1.Parent = screenGui
+
+    -- Create the second new button
+    local newButton2 = Instance.new("TextButton")
+    newButton2.Size = UDim2.new(0, 100, 0, 50)
+    newButton2.Position = UDim2.new(0.5, 50, 0.5, 0)
+    newButton2.Text = "New Button 2"
+    newButton2.Parent = screenGui
+end
 
 -- Button click event
-button.MouseButton1Click:Connect(function()
+enterButton.MouseButton1Click:Connect(function()
     local enteredText = textBox.Text
-    print("Entered text: " .. enteredText)
+    local player = game.Players.LocalPlayer
+
+    local isValid, message = isValidKey(enteredText, player)
+    if isValid then
+        -- Remove the TextBox and Enter Button
+        textBox:Destroy()
+        enterButton:Destroy()
+
+        -- Create new buttons
+        createNewButtons()
+    else
+        -- Display a message if the key is invalid or already redeemed
+        warn(message)
+    end
 end)
