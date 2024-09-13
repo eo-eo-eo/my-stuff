@@ -172,24 +172,6 @@ RainbowButton.MouseButton1Click:Connect(function()
                 
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
-                
-                local args = { [1] = math.random(3002, 3006) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                
-                local args = { [1] = math.random(2001, 2013) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                
-                local args = { [1] = math.random(1, 25) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
             end
         end)()
     end
@@ -198,42 +180,33 @@ end)
 RandomTowerButton.MouseButton1Click:Connect(function()
     randomTowerLoopEnabled = not randomTowerLoopEnabled
     RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
-
+    
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local monsterId = math.random(1, 52)
-                fireEquipRemote(monsterId, 1)
-                wait(0.2)
+                local args = { [1] = math.random(1, 10) }
+                EquipRemote:FireServer(unpack(args))
+                wait(0.1)
             end
         end)()
     end
 end)
 
--- Create another draggable button
-local DraggableButton = Instance.new("TextButton")
-DraggableButton.Size = UDim2.new(0.2, 0, 0.1, 0) -- Adjust size as needed
-DraggableButton.Position = UDim2.new(0.8, -DraggableButton.Size.X.Offset / 2, 0.8, -DraggableButton.Size.Y.Offset / 2) -- Position on the screen
-DraggableButton.Text = "Draggable Button"
-DraggableButton.BackgroundColor3 = Color3.fromRGB(0, 0, 255) -- Blue background
-DraggableButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-DraggableButton.Parent = ScreenGui
-
--- Make the draggable button draggable
+-- Make the frame draggable by dragging the header
 local dragToggle = nil
 local dragStart = nil
 local startPos = nil
 
 local function update(input)
     local delta = input.Position - dragStart
-    DraggableButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-DraggableButton.InputBegan:Connect(function(input)
+Header.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragToggle = true
         dragStart = input.Position
-        startPos = DraggableButton.Position
+        startPos = Frame.Position
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragToggle = false
@@ -242,7 +215,7 @@ DraggableButton.InputBegan:Connect(function(input)
     end
 end)
 
-DraggableButton.InputChanged:Connect(function(input)
+Header.InputChanged:Connect(function(input)
     if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragToggle then
         update(input)
     end
