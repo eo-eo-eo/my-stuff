@@ -1,7 +1,7 @@
 -- List of valid keys
 local validKeys = {
-    "ItisTHEend4you2-WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
-    "Andrew_TaMare-HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB",
+    "WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
+    "HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB",
     "ZxTM3jSWmmx56jgu5p8fZdtZyzREKXrg5wFULxLoJjf9kYp3ZN5rTnsk2vao24yzy6bRXkshcpXN6zesxY5GPKUM2xHv8DRxsCxGXpCpZqHnzgWpbJ3rKv2XAk6Z9spa",
     "3ezrk6MDonPQrUi2SxidABTMDMot4D3e9UotL2akxdEjRr2C3mthDferN5kc4cgCporG4AbS6N6SHAx5Myy2puHvoo5pndEjRZzAhWebhLKWP2SpdahP83XzUrB43pHW",
     "5CXQLe33V6ipWpLs2Z85MVp7ddFxuzKvKS93spnhJdqpctBzN83bKY3kkeE3L9WFygshvHAeDWARWJi643zefARvskvhcqcEowrH2DiJp29ouQ4dfaNt6QG8azseyuMf",
@@ -54,21 +54,40 @@ local function isValidKey(inputText, player)
     return false
 end
 
--- Function to create two new buttons
+-- Function to destroy all GUI elements
+local function destroyAllButtons()
+    for _, guiObject in pairs(screenGui:GetChildren()) do
+        guiObject:Destroy()
+    end
+end
+
+-- Function to create two new buttons with specific text and behavior
 local function createNewButtons()
-    -- Create the first new button
+    -- Create the first new button (Fast Device GUI)
     local newButton1 = Instance.new("TextButton")
-    newButton1.Size = UDim2.new(0, 100, 0, 50)
-    newButton1.Position = UDim2.new(0.5, -150, 0.5, 0)
-    newButton1.Text = "New Button 1"
+    newButton1.Size = UDim2.new(0, 200, 0, 50)
+    newButton1.Position = UDim2.new(0.5, -250, 0.6, 0)
+    newButton1.Text = "UTTD GUI for Fast Device"
     newButton1.Parent = screenGui
 
-    -- Create the second new button
+    -- Create the second new button (Slow Device GUI)
     local newButton2 = Instance.new("TextButton")
-    newButton2.Size = UDim2.new(0, 100, 0, 50)
-    newButton2.Position = UDim2.new(0.5, 50, 0.5, 0)
-    newButton2.Text = "New Button 2"
+    newButton2.Size = UDim2.new(0, 200, 0, 50)
+    newButton2.Position = UDim2.new(0.5, 50, 0.6, 0)
+    newButton2.Text = "UTTD GUI for Slow Device"
     newButton2.Parent = screenGui
+
+    -- Button1 click event (Fast Device)
+    newButton1.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20fast%20device", true))()
+        destroyAllButtons()
+    end)
+
+    -- Button2 click event (Slow Device)
+    newButton2.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20slow%20device", true))()
+        destroyAllButtons()
+    end)
 end
 
 -- Button click event
