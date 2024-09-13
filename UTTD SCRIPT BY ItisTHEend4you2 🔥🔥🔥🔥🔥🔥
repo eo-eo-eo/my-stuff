@@ -1,6 +1,6 @@
 -- List of valid keys
 local validKeys = {
-    "ItisTHEend4you2-WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
+    "WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
     "HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB",
     "ZxTM3jSWmmx56jgu5p8fZdtZyzREKXrg5wFULxLoJjf9kYp3ZN5rTnsk2vao24yzy6bRXkshcpXN6zesxY5GPKUM2xHv8DRxsCxGXpCpZqHnzgWpbJ3rKv2XAk6Z9spa",
     "3ezrk6MDonPQrUi2SxidABTMDMot4D3e9UotL2akxdEjRr2C3mthDferN5kc4cgCporG4AbS6N6SHAx5Myy2puHvoo5pndEjRZzAhWebhLKWP2SpdahP83XzUrB43pHW",
@@ -39,16 +39,19 @@ local function isValidKey(inputText, player)
                 if redeemedKeys[key] == player then
                     return true -- Player has already redeemed this key
                 else
-                    return false, "This key has already been redeemed by another player."
+                    warn("This key has already been redeemed by another player.")
+                    return false
                 end
             else
                 -- Mark the key as redeemed by this player
                 redeemedKeys[key] = player
+                print("Key redeemed successfully.")
                 return true
             end
         end
     end
-    return false, "Invalid key."
+    warn("Invalid key entered.")
+    return false
 end
 
 -- Function to create two new buttons
@@ -73,7 +76,7 @@ enterButton.MouseButton1Click:Connect(function()
     local enteredText = textBox.Text
     local player = game.Players.LocalPlayer
 
-    local isValid, message = isValidKey(enteredText, player)
+    local isValid = isValidKey(enteredText, player)
     if isValid then
         -- Remove the TextBox and Enter Button
         textBox:Destroy()
@@ -82,7 +85,6 @@ enterButton.MouseButton1Click:Connect(function()
         -- Create new buttons
         createNewButtons()
     else
-        -- Display a message if the key is invalid or already redeemed
-        warn(message)
+        print("Redemption failed or invalid key.")
     end
 end)
