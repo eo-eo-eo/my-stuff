@@ -1,14 +1,4 @@
-local validKeys = {
-    "ItisTHEend4you2-WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
-    "Andrew_TaMare-HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB",
-    "ZxTM3jSWmmx56jgu5p8fZdtZyzREKXrg5wFULxLoJjf9kYp3ZN5rTnsk2vao24yzy6bRXkshcpXN6zesxY5GPKUM2xHv8DRxsCxGXpCpZqHnzgWpbJ3rKv2XAk6Z9spa",
-    "3ezrk6MDonPQrUi2SxidABTMDMot4D3e9UotL2akxdEjRr2C3mthDferN5kc4cgCporG4AbS6N6SHAx5Myy2puHvoo5pndEjRZzAhWebhLKWP2SpdahP83XzUrB43pHW",
-    "5CXQLe33V6ipWpLs2Z85MVp7ddFxuzKvKS93spnhJdqpctBzN83bKY3kkeE3L9WFygshvHAeDWARWJi643zefARvskvhcqcEowrH2DiJp29ouQ4dfaNt6QG8azseyuMf",
-    "rvuFZ7rSC8D5P8LnBNSPL8Z98UTNeDBgNuqx6jmgXLTquerHc3niMkdYadaxnXwwKKBdiT8nFPd6Eb6BXiSLZrmbgYV6PSZZbVTzns7j4yCSBMoYHajACTCYRTCNNaBe",
-    "bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"
-}
-
-local redeemedKeys = {}
+local HttpService = game:GetService("HttpService")
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -25,25 +15,25 @@ enterButton.Position = UDim2.new(0.5, -50, 0.5, 0)
 enterButton.Text = "Enter Key"
 enterButton.Parent = screenGui
 
-local function isValidKey(inputText, player)
-    for _, key in pairs(validKeys) do
-        if inputText == key then
-            if redeemedKeys[key] then
-                if redeemedKeys[key] == player then
-                    return true
-                else
-                    warn("This key has already been redeemed by another player.")
-                    return false
-                end
-            else
-                redeemedKeys[key] = player
-                print("Key redeemed successfully.")
-                return true
-            end
-        end
+local googleAppUrl = "https://script.google.com/macros/s/AKfycbxmbCmfkiVWlQTxZTO6DDOnRPIxnGimY9db5PVxq_ahyVYsxTfQ-dwUI-wuYCWlTHsj/exec"
+
+local function validateKey(inputKey)
+    local data = {
+        key = inputKey,
+        playerId = game.Players.LocalPlayer.UserId
+    }
+    
+    local success, response = pcall(function()
+        return HttpService:PostAsync(googleAppUrl, HttpService:JSONEncode(data), Enum.HttpContentType.ApplicationJson)
+    end)
+    
+    if success then
+        local decodedResponse = HttpService:JSONDecode(response)
+        return decodedResponse.valid
+    else
+        warn("Error in HTTP request: " .. response)
+        return false
     end
-    warn("Invalid key entered.")
-    return false
 end
 
 local function destroyAllButtons()
@@ -78,13 +68,11 @@ end
 
 enterButton.MouseButton1Click:Connect(function()
     local enteredText = textBox.Text
-    local player = game.Players.LocalPlayer
-
-    local isValid = isValidKey(enteredText, player)
+    local isValid = validateKey(enteredText)
+    
     if isValid then
         textBox:Destroy()
         enterButton:Destroy()
-
         createNewButtons()
     else
         print("Redemption failed or invalid key.")
