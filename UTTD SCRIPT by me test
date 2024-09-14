@@ -48,7 +48,9 @@ end
 
 local function destroyAllButtons()
     for _, guiObject in pairs(screenGui:GetChildren()) do
-        guiObject:Destroy()
+        if guiObject:IsA("TextButton") then
+            guiObject:Destroy()
+        end
     end
 end
 
