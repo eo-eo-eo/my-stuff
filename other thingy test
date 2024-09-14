@@ -40,6 +40,12 @@ Header.Position = UDim2.new(0, 0, 0, 0)
 Header.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Header.Parent = Frame
 
+local DraggableButton = Instance.new("TextButton")
+DraggableButton.Size = UDim2.new(0.1, 0, 1, 0)
+DraggableButton.Position = UDim2.new(1, -DraggableButton.Size.X.Offset, 0, 0)
+DraggableButton.Text = "-"
+DraggableButton.Parent = Header
+
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0.9, 0, 0.1, 0)
 TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.12, 0)
@@ -56,7 +62,7 @@ local RandomTowerButton = createButton("Random Tower")
 
 local WaitTimeTextBox = Instance.new("TextBox")
 WaitTimeTextBox.Size = UDim2.new(0.4, 0, 0.08, 0)
-WaitTimeTextBox.Position = UDim2.new(0.9, -WaitTimeTextBox.Size.X.Offset, 0, 0)
+WaitTimeTextBox.Position = UDim2.new(0.3, 0, 0, 0)
 WaitTimeTextBox.Text = "0.1"
 WaitTimeTextBox.PlaceholderText = "Wait Time"
 WaitTimeTextBox.Parent = Frame
@@ -161,26 +167,6 @@ RainbowButton.MouseButton1Click:Connect(function()
             while rainbowLoopEnabled do
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(1001, 1052) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(1501, 1512) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(3002, 3006) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(2001, 2013) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
                 wait(0.1)
             end
         end)()
@@ -201,35 +187,28 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
-local DraggableButton = Instance.new("TextButton")
-DraggableButton.Size = UDim2.new(0.05, 0, 0.05, 0)
-DraggableButton.Position = UDim2.new(0.9, 0, 0, 0)
-DraggableButton.Text = "-"
-DraggableButton.Parent = ScreenGui
+DraggableButton.MouseButton1Click:Connect(function()
+    Frame.Visible = not Frame.Visible
+    DraggableButton.Text = Frame.Visible and "-" or "+"
+end)
 
 local dragging = false
-local dragInput, mousePos, framePos
+local dragInput, mousePos, buttonPos
 
 local function update(input)
     local delta = input.Position - mousePos
-    Frame.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
-    DraggableButton.Position = UDim2.new(DraggableButton.Position.X.Scale, DraggableButton.Position.X.Offset + delta.X, DraggableButton.Position.Y.Scale, DraggableButton.Position.Y.Offset + delta.Y)
+    Frame.Position = UDim2.new(Frame.Position.X.Scale, Frame.Position.X.Offset + delta.X, Frame.Position.Y.Scale, Frame.Position.Y.Offset + delta.Y)
 end
 
 DraggableButton.MouseButton1Down:Connect(function(input)
     dragging = true
     mousePos = input.Position
-    framePos = Frame.Position
+    buttonPos = DraggableButton.Position
     input.Changed:Connect(function()
         if input.UserInputState == Enum.UserInputState.End then
             dragging = false
         end
     end)
-end)
-
-DraggableButton.MouseButton1Click:Connect(function()
-    Frame.Visible = not Frame.Visible
-    DraggableButton.Text = Frame.Visible and "-" or "+"
 end)
 
 DraggableButton.InputChanged:Connect(function(input)
