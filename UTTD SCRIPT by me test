@@ -79,7 +79,7 @@ local function createNewButtons()
             destroyAllButtonsExcept(clickedButton)
         else
             destroyAllButtonsExcept(clickedButton)
-            clickedButton.Text = "Wrong game idiot"
+            clickedButton.Text = "Wrong game you fucking silly goober"
         end
     end
 
