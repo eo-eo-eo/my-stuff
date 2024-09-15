@@ -4,12 +4,10 @@ ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0.4, 0, 0.8, 0)
 Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2)
-Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)  -- This ensures the frame is centered on its position
 Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BackgroundTransparency = 0.5
 Frame.Visible = true
-Frame.Active = true
-Frame.Draggable = true
 Frame.Parent = ScreenGui
 
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
@@ -49,23 +47,31 @@ TextBox.Parent = Frame
 local Button1 = createButton("Equip")
 local Button2 = createButton("Unequip")
 local Button3 = createButton("Normal")
-local ToggleButton = createButton("Disable tower duping")
+
+local ToggleButtonFrame = Instance.new("Frame")
+ToggleButtonFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
+ToggleButtonFrame.Position = UDim2.new(0.5, -ToggleButtonFrame.Size.X.Offset / 2, 0.25, 0)
+ToggleButtonFrame.Parent = Frame
+
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0.8, -100, 1, 0)
+ToggleButton.Text = "Disable tower duping"
+ToggleButton.Parent = ToggleButtonFrame
+
+local DelayTextBox = Instance.new("TextBox")
+DelayTextBox.Size = UDim2.new(0.2, 0, 1, 0)
+DelayTextBox.Position = UDim2.new(0.8, 0, 0, 0)
+DelayTextBox.Text = "0.1"
+DelayTextBox.Parent = ToggleButtonFrame
+
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-
-local WaitTimeTextBox = Instance.new("TextBox")
-WaitTimeTextBox.Size = UDim2.new(0.4, 0, 0.08, 0)
-WaitTimeTextBox.Position = UDim2.new(0.9, -WaitTimeTextBox.Size.X.Offset, 0, 0)
-WaitTimeTextBox.Text = "0.1"
-WaitTimeTextBox.PlaceholderText = "Wait Time"
-WaitTimeTextBox.Parent = Frame
 
 local loopEnabled = false
 local isNormal = true
 local rainbowLoopEnabled = false
 local randomTowerLoopEnabled = false
-local waitTime = tonumber(WaitTimeTextBox.Text) or 0.1
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
@@ -73,23 +79,36 @@ local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
 
 local monsterMapping = {
-    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7,
-    snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14,
-    dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19, moldbygg = 20, shyren = 21, vulkin = 22,
-    tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27, finalfroggit = 28,
-    whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34,
-    orangesoul = 35, purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40,
-    maddummy = 41, alphys = 42, glyde = 43, sosorry = 44, memoryhead = 45, endogeny = 46, reaperbird = 47,
-    lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52, rudinn = 501,
-    hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508,
-    clover = 509, starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002,
-    papyrus = 1003, undyne = 1004, muffet = 1005, mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008,
-    mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012, asriel = 1013, kris = 2001, susie = 2002,
+    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, 
+    snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14, 
+    dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19, moldbygg = 20, shyren = 21, vulkin = 22, 
+    tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27, finalfroggit = 28, 
+    whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34, 
+    orangesoul = 35, purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40, 
+    maddummy = 41, alphys = 42, glyde = 43, sosorry = 44, memoryhead = 45, endogeny = 46, reaperbird = 47, 
+    lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52, rudinn = 501, 
+    hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508, 
+    clover = 509, starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002, 
+    papyrus = 1003, undyne = 1004, muffet = 1005, mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008, 
+    mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012, asriel = 1013, kris = 2001, susie = 2002, 
     ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
 }
 
 local function getMonsterId(monsterName)
     return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
+end
+
+local function runLoop(monsterId, waitTime)
+    while loopEnabled do
+        local args1 = { [1] = monsterId, [2] = 1 }
+        EquipRemote:FireServer(unpack(args1))
+        wait(0)
+        local args2 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args2))
+        local args3 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args3))
+        wait(waitTime)
+    end
 end
 
 local function fireEquipRemote(monsterId, equipType)
@@ -98,17 +117,6 @@ local function fireEquipRemote(monsterId, equipType)
     else
         local args = { [1] = monsterId - 1000, [2] = equipType }
         Equip2Remote:FireServer(unpack(args))
-    end
-end
-
-local function runLoop(monsterId)
-    while loopEnabled do
-        local args1 = { [1] = monsterId, [2] = 1 }
-        EquipRemote:FireServer(unpack(args1))
-        wait(0)
-        local args2 = { [1] = monsterId, [2] = 2 }
-        EquipRemote:FireServer(unpack(args2))
-        wait(waitTime)
     end
 end
 
@@ -136,10 +144,10 @@ ToggleButton.MouseButton1Click:Connect(function()
     if monsterId then
         loopEnabled = not loopEnabled
         ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
-        waitTime = tonumber(WaitTimeTextBox.Text) or 0.1
         if loopEnabled then
+            local waitTime = tonumber(DelayTextBox.Text) or 0.1
             coroutine.wrap(function()
-                runLoop(monsterId)
+                runLoop(monsterId, waitTime)
             end)()
         end
     end
@@ -193,9 +201,9 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local args = { [1] = math.random(1, 52), [2] = 1 }
+                local args = { [1] = 1, [2] = TextBox.Text }
                 EquipRemote:FireServer(unpack(args))
-                wait(0.05)
+                wait(0.2)
             end
         end)()
     end
@@ -213,7 +221,6 @@ local dragInput, mousePos, framePos
 local function update(input)
     local delta = input.Position - mousePos
     Frame.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
-    DraggableButton.Position = UDim2.new(DraggableButton.Position.X.Scale, DraggableButton.Position.X.Offset + delta.X, DraggableButton.Position.Y.Scale, DraggableButton.Position.Y.Offset + delta.Y)
 end
 
 DraggableButton.MouseButton1Down:Connect(function(input)
