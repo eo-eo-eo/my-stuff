@@ -6,7 +6,6 @@ local validKeys = {
     ["randaaalll-5CXQLe33V6ipWpLs2Z85MVp7ddFxuzKvKS93spnhJdqpctBzN83bKY3kkeE3L9WFygshvHAeDWARWJi643zefARvskvhcqcEowrH2DiJp29ouQ4dfaNt6QG8azseyuMf"] = 5518947076,
     ["avretyk-rvuFZ7rSC8D5P8LnBNSPL8Z98UTNeDBgNuqx6jmgXLTquerHc3niMkdYadaxnXwwKKBdiT8nFPd6Eb6BXiSLZrmbgYV6PSZZbVTzns7j4yCSBMoYHajACTCYRTCNNaBe"] = 1618181080,
     ["Goombella_Plays-bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"] = 4797364268
-    ["DannyJesdtnYT3-UC8uhvKQW5KZKe7bxHALj4Stt8yqYGrcv6P9HrJTDCbczwSrL9wtE37KSRDFaPPF"] = 1291969205
 }
 
 local screenGui = Instance.new("ScreenGui")
