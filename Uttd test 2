@@ -48,7 +48,7 @@ end
 local Button1 = createButton("Equip")
 local Button2 = createButton("Unequip")
 local Button3 = createButton("Normal")
-local ToggleButton = createButton("Disable tower duping")
+local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
@@ -134,7 +134,7 @@ ToggleButton.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(monsterName)
     if monsterId then
         loopEnabled = not loopEnabled
-        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
+        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping"
         if loopEnabled then
             coroutine.wrap(function()
                 runLoop(monsterId)
@@ -167,16 +167,6 @@ RainbowButton.MouseButton1Click:Connect(function()
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
                 local args = { [1] = math.random(1501, 1512) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(3002, 3006) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(2001, 2013) }
                 TitleRemote:FireServer(unpack(args))
                 wait(0)
                 local args = { [1] = 19 }
@@ -252,3 +242,7 @@ DraggableButton.MouseButton1Click:Connect(function()
 end)
 
 makeDraggable(DraggableButton)
+
+-- Ensure the initial state of ToggleButton is "Enable tower duping" and loop is disabled
+ToggleButton.Text = "Enable tower duping"
+loopEnabled = false
