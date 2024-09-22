@@ -105,14 +105,18 @@ local function fireEquipRemote(monsterId, equipType)
 end
 
 Button1.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         fireEquipRemote(monsterId, 1)
     end
 end)
 
 Button2.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         fireEquipRemote(monsterId, 2)
     end
@@ -124,7 +128,9 @@ Button3.MouseButton1Click:Connect(function()
 end)
 
 ToggleButton.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         loopEnabled = not loopEnabled
         ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
@@ -137,7 +143,9 @@ ToggleButton.MouseButton1Click:Connect(function()
 end)
 
 MorphButton.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         local args = { [1] = monsterId + 1000 }
         TitleRemote:FireServer(unpack(args))
