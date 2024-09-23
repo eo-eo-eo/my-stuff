@@ -171,7 +171,7 @@ RainbowButton.MouseButton1Click:Connect(function()
                 wait(0)
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
-                wait(0.2)
+                wait(0.1)
             end
         end)()
     end
