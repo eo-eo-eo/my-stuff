@@ -1,4 +1,14 @@
 local validKeys = {
+    "ItisTHEend4you2-WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU",
+    "Andrew_TaMare-HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB",
+    "AnotherPseudonym-ZxTM3jSWmmx56jgu5p8fZdtZyzREKXrg5wFULxLoJjf9kYp3ZN5rTnsk2vao24yzy6bRXkshcpXN6zesxY5GPKUM2xHv8DRxsCxGXpCpZqHnzgWpbJ3rKv2XAk6Z9spa",
+    "alexmaster0914-3ezrk6MDonPQrUi2SxidABTMDMot4D3e9UotL2akxdEjRr2C3mthDferN5kc4cgCporG4AbS6N6SHAx5Myy2puHvoo5pndEjRZzAhWebhLKWP2SpdahP83XzUrB43pHW",
+    "randaaalll-5CXQLe33V6ipWpLs2Z85MVp7ddFxuzKvKS93spnhJdqpctBzN83bKY3kkeE3L9WFygshvHAeDWARWJi643zefARvskvhcqcEowrH2DiJp29ouQ4dfaNt6QG8azseyuMf",
+    "avretyk-rvuFZ7rSC8D5P8LnBNSPL8Z98UTNeDBgNuqx6jmgXLTquerHc3niMkdYadaxnXwwKKBdiT8nFPd6Eb6BXiSLZrmbgYV6PSZZbVTzns7j4yCSBMoYHajACTCYRTCNNaBe",
+    "Goombella_Plays-bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"
+}
+
+local keyToPlayerId = {
     ["ItisTHEend4you2-WY3fFzuhS5637iocngqQ7Ce4JSzy4g2VgnmgF3mRazANPRJXazNGgHzXqxLUrhFYTSac5SsGSpAZymTo29kHBjTs3pjuJ9xUw9WSf7juYeUuPF4DJ2H7K3MaaAx888SU"] = 3365505225,
     ["Andrew_TaMare-HcWjwvJvGG67oP9FNZQHAoBoYHofa9KZ8ap2UDtWXFzJL6U5qwruG4MgidAng3LsDgEPfKWU3XGHWCLZ3jwenavDhPCPdTYTpeEVDbKAzijZF9WHC5PqDBVKMrhefiJB"] = 5415057316,
     ["AnotherPseudonym-ZxTM3jSWmmx56jgu5p8fZdtZyzREKXrg5wFULxLoJjf9kYp3ZN5rTnsk2vao24yzy6bRXkshcpXN6zesxY5GPKUM2xHv8DRxsCxGXpCpZqHnzgWpbJ3rKv2XAk6Z9spa"] = 5703916605,
@@ -7,6 +17,8 @@ local validKeys = {
     ["avretyk-rvuFZ7rSC8D5P8LnBNSPL8Z98UTNeDBgNuqx6jmgXLTquerHc3niMkdYadaxnXwwKKBdiT8nFPd6Eb6BXiSLZrmbgYV6PSZZbVTzns7j4yCSBMoYHajACTCYRTCNNaBe"] = 1618181080,
     ["Goombella_Plays-bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"] = 4797364268
 }
+
+local redeemedKeys = {}
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -24,14 +36,18 @@ enterButton.Text = "Enter Key"
 enterButton.Parent = screenGui
 
 local function isValidKey(inputText, player)
-    local playerId = player.UserId
-    local expectedId = validKeys[inputText]
-    if expectedId then
-        if playerId == expectedId then
+    local keyOwnerId = keyToPlayerId[inputText]
+    if keyOwnerId and keyOwnerId == player.UserId then
+        if not redeemedKeys[inputText] then
+            redeemedKeys[inputText] = player
             return true
         else
-            return false
+            warn("This key has already been redeemed.")
         end
+    else
+        enterButton.Text = "That isn't your key, you silly goober :3"
+        textBox:Destroy()
+        return false
     end
     return false
 end
@@ -55,22 +71,14 @@ local function createNewButtons()
     newButton2.Text = "UTTD GUI for Slow Device"
     newButton2.Parent = screenGui
 
-    local function handleButtonClick(clickedButton, scriptUrl)
-        if game.PlaceId == 6849018101 then
-            loadstring(game:HttpGet(scriptUrl, true))()
-            destroyAllButtons()
-        else
-            destroyAllButtons()
-            clickedButton.Text = "Wrong game you silly goober"
-        end
-    end
-
     newButton1.MouseButton1Click:Connect(function()
-        handleButtonClick(newButton1, "https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20fast%20device")
+        destroyAllButtons()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20fast%20device", true))()
     end)
 
     newButton2.MouseButton1Click:Connect(function()
-        handleButtonClick(newButton2, "https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20slow%20device")
+        destroyAllButtons()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20slow%20device", true))()
     end)
 end
 
@@ -78,14 +86,5 @@ enterButton.MouseButton1Click:Connect(function()
     local enteredText = textBox.Text
     local player = game.Players.LocalPlayer
 
-    local isValid = isValidKey(enteredText, player)
-    if isValid then
+    if isValidKey(enteredText, player) then
         textBox:Destroy()
-        enterButton:Destroy()
-
-        createNewButtons()
-    else
-        textBox:Destroy()
-        enterButton.Text = "That isn't your key, you silly goober :3"
-    end
-end)
