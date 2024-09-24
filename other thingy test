@@ -8,20 +8,31 @@ Frame.AnchorPoint = Vector2.new(0.5, 0.5)
 Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BackgroundTransparency = 0.5
 Frame.Visible = true
-Frame.Active = true
-Frame.Draggable = true
 Frame.Parent = ScreenGui
 
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
 AspectRatio.AspectRatio = 4 / 3
 AspectRatio.Parent = Frame
 
+local ScrollingFrame = Instance.new("ScrollingFrame")
+ScrollingFrame.Size = UDim2.new(1, 0, 0.8, 0)
+ScrollingFrame.Position = UDim2.new(0, 0, 0.1, 0)
+ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ScrollingFrame.ScrollBarThickness = 10
+ScrollingFrame.Parent = Frame
+
 local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Parent = Frame
+UIListLayout.Parent = ScrollingFrame
 UIListLayout.FillDirection = Enum.FillDirection.Vertical
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 UIListLayout.Padding = UDim.new(0, 10)
+
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(0.9, 0, 0.1, 0)
+TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0, 0)
+TextBox.Text = "monsters name here"
+TextBox.Parent = ScrollingFrame
 
 local buttonWidth = 0.9
 local buttonHeight = 0.08
@@ -30,48 +41,23 @@ local function createButton(text)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(buttonWidth, 0, buttonHeight, 0)
     button.Text = text
-    button.Parent = Frame
+    button.Parent = ScrollingFrame
     return button
 end
-
-local Header = Instance.new("Frame")
-Header.Size = UDim2.new(1, 0, 0.1, 0)
-Header.Position = UDim2.new(0, 0, 0, 0)
-Header.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-Header.Parent = Frame
-
-local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.9, 0, 0.1, 0)
-TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0.12, 0)
-TextBox.Text = "monsters name here"
-TextBox.Parent = Frame
 
 local Button1 = createButton("Equip")
 local Button2 = createButton("Unequip")
 local Button3 = createButton("Normal")
-local ToggleButton = createButton("Disable tower duping")
+local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-
-local WaitTimeTextBox = Instance.new("TextBox")
-WaitTimeTextBox.Size = UDim2.new(0.4, 0, 0.08, 0)
-WaitTimeTextBox.Position = UDim2.new(0.3, 0, 0, 0)
-WaitTimeTextBox.Text = "0.1"
-WaitTimeTextBox.PlaceholderText = "Wait Time"
-WaitTimeTextBox.Parent = Frame
-
-local DraggableButton = Instance.new("TextButton")
-DraggableButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-DraggableButton.Position = UDim2.new(1, -DraggableButton.Size.X.Offset, 0, 0)
-DraggableButton.Text = "-"
-DraggableButton.Parent = ScreenGui
+local PlaceButton = createButton("Place")
 
 local loopEnabled = false
 local isNormal = true
 local rainbowLoopEnabled = false
 local randomTowerLoopEnabled = false
-local waitTime = tonumber(WaitTimeTextBox.Text) or 0.1
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
@@ -79,23 +65,33 @@ local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
 
 local monsterMapping = {
-    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7,
-    snowdrake = 8, icecap = 9, lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14,
-    dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19, moldbygg = 20, shyren = 21, vulkin = 22,
-    tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27, finalfroggit = 28,
-    whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34,
-    orangesoul = 35, purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40,
-    maddummy = 41, alphys = 42, glyde = 43, sosorry = 44, memoryhead = 45, endogeny = 46, reaperbird = 47,
-    lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52, rudinn = 501,
-    hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508,
-    clover = 509, starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002,
-    papyrus = 1003, undyne = 1004, muffet = 1005, mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008,
-    mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012, asriel = 1013, kris = 2001, susie = 2002,
-    ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
+    froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, snowdrake = 8, icecap = 9,
+    lesserdog = 10, gyftrot = 11, jerry = 12, doggo = 13, dogami = 14, dogaressa = 15, greaterdog = 17, aaron = 18, woshua = 19,
+    moldbygg = 20, shyren = 21, vulkin = 22, tsunderplane = 23, pyrope = 24, royalguard01 = 25, royalguard02 = 26, mettaton = 27,
+    finalfroggit = 28, whimsalot = 29, astigmatism = 30, knightknight = 31, madjick = 32, bluesoul = 33, greensoul = 34, orangesoul = 35,
+    purplesoul = 36, yellowsoul = 37, cyansoul = 38, dummy = 39, temmie = 40, maddummy = 41, alphys = 42, glyde = 43, sosorry = 44,
+    memoryhead = 45, endogeny = 46, reaperbird = 47, lemonbread = 48, snowdrakesmother = 49, parsnik = 50, moldessa = 51, migospel = 52,
+    rudinn = 501, hathy = 502, ponman = 503, jigsawry = 504, cround = 505, kround = 506, rabbick = 507, bloxer = 508, clover = 509,
+    starwalkerbird = 510, rudinnranger = 511, headhathy = 512, frisk = 1001, toriel = 1002, papyrus = 1003, undyne = 1004, muffet = 1005,
+    mettatonex = 1006, omegaflowey = 1007, undynetheundying = 1008, mettatonneo = 1009, sans = 1010, asgore = 1011, madmewmew = 1012,
+    asriel = 1013, kris = 2001, susie = 2002, ralsei = 2003, lancer = 2004, king = 2005, jevil = 2006
 }
 
 local function getMonsterId(monsterName)
     return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
+end
+
+local function runLoop(monsterId)
+    while loopEnabled do
+        local args1 = { [1] = monsterId, [2] = 1 }
+        EquipRemote:FireServer(unpack(args1))
+        wait(0)
+        local args2 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args2))
+        local args3 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args3))
+        wait(0.1)
+    end
 end
 
 local function fireEquipRemote(monsterId, equipType)
@@ -107,26 +103,19 @@ local function fireEquipRemote(monsterId, equipType)
     end
 end
 
-local function runLoop(monsterId)
-    while loopEnabled do
-        local args1 = { [1] = monsterId, [2] = 1 }
-        EquipRemote:FireServer(unpack(args1))
-        wait(0)
-        local args2 = { [1] = monsterId, [2] = 2 }
-        EquipRemote:FireServer(unpack(args2))
-        wait(waitTime)
-    end
-end
-
 Button1.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         fireEquipRemote(monsterId, 1)
     end
 end)
 
 Button2.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         fireEquipRemote(monsterId, 2)
     end
@@ -138,11 +127,12 @@ Button3.MouseButton1Click:Connect(function()
 end)
 
 ToggleButton.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         loopEnabled = not loopEnabled
-        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping(laggy)"
-        waitTime = tonumber(WaitTimeTextBox.Text) or 0.1
+        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping"
         if loopEnabled then
             coroutine.wrap(function()
                 runLoop(monsterId)
@@ -152,7 +142,9 @@ ToggleButton.MouseButton1Click:Connect(function()
 end)
 
 MorphButton.MouseButton1Click:Connect(function()
-    local monsterId = getMonsterId(TextBox.Text)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
     if monsterId then
         local args = { [1] = monsterId + 1000 }
         TitleRemote:FireServer(unpack(args))
@@ -161,13 +153,25 @@ end)
 
 RainbowButton.MouseButton1Click:Connect(function()
     rainbowLoopEnabled = not rainbowLoopEnabled
-    RainbowButton.Text = rainbowLoopEnabled and "Stop Random Rainbow Title" or "Random Rainbow Title"
+    RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
     if rainbowLoopEnabled then
         coroutine.wrap(function()
             while rainbowLoopEnabled do
-                local args = { [1] = math.random(1, 52) }
+                local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
-                wait(0.05)
+                local args = { [1] = math.random(1001, 1052) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(1501, 1512) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0)
+                local args = { [1] = 19 }
+                TitleRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(1701, 1712) }
+                TitleRemote:FireServer(unpack(args))
+                wait(0.1)
             end
         end)()
     end
@@ -179,48 +183,37 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local args = { [1] = math.random(1, 52), [2] = 1 }
+                local args = { [1] = math.random(1, 50) }
                 EquipRemote:FireServer(unpack(args))
-                wait(0.05)
+                wait(0.1)
             end
         end)()
     end
 end)
 
-DraggableButton.MouseButton1Click:Connect(function()
-    Frame.Visible = not Frame.Visible
-end)
+local UserInputService = game:GetService("UserInputService")
 
-local dragging = false
-local dragInput, mousePos, buttonPos
-
-local function update(input)
-    local delta = input.Position - mousePos
-    Frame.Position = UDim2.new(Frame.Position.X.Scale, Frame.Position.X.Offset + delta.X, Frame.Position.Y.Scale, Frame.Position.Y.Offset + delta.Y)
-end
-
-Header.MouseButton1Down:Connect(function(input)
-    dragging = true
-    mousePos = input.Position
-    buttonPos = Header.Position
-    input.Changed:Connect(function()
-        if input.UserInputState == Enum.UserInputState.End then
-            dragging = false
+PlaceButton.MouseButton1Click:Connect(function()
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
+    if not monsterId then return end
+    if not isNormal then
+        monsterId = monsterId - 1000
+    end
+    local connection
+    connection = UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            local mouse = game.Players.LocalPlayer:GetMouse()
+            local targetPosition = mouse.Hit.Position
+            local args = {
+                [1] = monsterId,
+                [2] = CFrame.new(targetPosition),
+                [3] = not isNormal,
+                [4] = 0
+            }
+            game:GetService("ReplicatedStorage").Place:FireServer(unpack(args))
+            connection:Disconnect()
         end
     end)
 end)
-
-Header.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and input == dragInput then
-        update(input)
-    end
-end)
-
-Frame.Visible = true
-DraggableButton.Text = "-"
