@@ -63,6 +63,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
+local PlaceRemote = ReplicatedStorage:WaitForChild("Place")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, snowdrake = 8, icecap = 9,
@@ -79,19 +80,6 @@ local monsterMapping = {
 
 local function getMonsterId(monsterName)
     return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
-end
-
-local function runLoop(monsterId)
-    while loopEnabled do
-        local args1 = { [1] = monsterId, [2] = 1 }
-        EquipRemote:FireServer(unpack(args1))
-        wait(0)
-        local args2 = { [1] = monsterId, [2] = 2 }
-        EquipRemote:FireServer(unpack(args2))
-        local args3 = { [1] = monsterId, [2] = 2 }
-        EquipRemote:FireServer(unpack(args3))
-        wait(0.1)
-    end
 end
 
 local function fireEquipRemote(monsterId, equipType)
@@ -126,94 +114,74 @@ Button3.MouseButton1Click:Connect(function()
     Button3.Text = isNormal and "Normal" or "Special"
 end)
 
-ToggleButton.MouseButton1Click:Connect(function()
-    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
-    monsterName = monsterName:gsub("%s+", "")
-    local monsterId = getMonsterId(monsterName)
-    if monsterId then
-        loopEnabled = not loopEnabled
-        ToggleButton.Text = loopEnabled and "Disable tower duping" or "Enable tower duping"
-        if loopEnabled then
-            coroutine.wrap(function()
-                runLoop(monsterId)
-            end)()
-        end
-    end
-end)
-
-MorphButton.MouseButton1Click:Connect(function()
-    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
-    monsterName = monsterName:gsub("%s+", "")
-    local monsterId = getMonsterId(monsterName)
-    if monsterId then
-        local args = { [1] = monsterId + 1000 }
-        TitleRemote:FireServer(unpack(args))
-    end
-end)
-
-RainbowButton.MouseButton1Click:Connect(function()
-    rainbowLoopEnabled = not rainbowLoopEnabled
-    RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
-    if rainbowLoopEnabled then
-        coroutine.wrap(function()
-            while rainbowLoopEnabled do
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(1001, 1052) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(1501, 1512) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(1701, 1712) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0.1)
-            end
-        end)()
-    end
-end)
-
-RandomTowerButton.MouseButton1Click:Connect(function()
-    randomTowerLoopEnabled = not randomTowerLoopEnabled
-    RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
-    if randomTowerLoopEnabled then
-        coroutine.wrap(function()
-            while randomTowerLoopEnabled do
-                local args = { [1] = math.random(1, 50) }
-                EquipRemote:FireServer(unpack(args))
-                wait(0.1)
-            end
-        end)()
-    end
-end)
-
-local UserInputService = game:GetService("UserInputService")
-
 PlaceButton.MouseButton1Click:Connect(function()
     local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
     monsterName = monsterName:gsub("%s+", "")
     local monsterId = getMonsterId(monsterName)
-    if not monsterId then return end
-    if not isNormal then
-        monsterId = monsterId - 1000
+    if monsterId then
+        if not isNormal then
+            monsterId = monsterId - 1000
+        end
+
+        local player = game.Players.LocalPlayer
+        local mouse = player:GetMouse()
+        
+        local userInputService = game:GetService("UserInputService")
+
+        local clicked = false
+        local position = nil
+
+        local function onInputBegan(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                clicked = true
+                position = mouse.Hit.p
+            end
+        end
+
+        userInputService.InputBegan:Connect(onInputBegan)
+
+        while not clicked do
+            wait()
+        end
+
+        local args = {
+            [1] = monsterId,
+            [2] = CFrame.new(position) * CFrame.Angles(0, 0, 0),
+            [3] = isNormal,
+            [4] = 0
+        }
+        PlaceRemote:FireServer(unpack(args))
     end
-    local connection
-    connection = UserInputService.InputBegan:Connect(function(input)
+end)
+
+local function makeDraggable(target)
+    local dragging = false
+    local dragInput, mousePos, framePos
+
+    local function update(input)
+        local delta = input.Position - mousePos
+        target.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+    end
+
+    target.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            local mouse = game.Players.LocalPlayer:GetMouse()
-            local targetPosition = mouse.Hit.Position
-            local args = {
-                [1] = monsterId,
-                [2] = CFrame.new(targetPosition),
-                [3] = not isNormal,
-                [4] = 0
-            }
-            game:GetService("ReplicatedStorage").Place:FireServer(unpack(args))
-            connection:Disconnect()
+            dragging = true
+            mousePos = input.Position
+            framePos = target.Position
         end
     end)
-end)
+
+    target.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            update(input)
+        end
+    end)
+end
+
+makeDraggable(Frame)
