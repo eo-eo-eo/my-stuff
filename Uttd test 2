@@ -114,7 +114,6 @@ ShowButton.MouseButton1Click:Connect(function()
             end 
         end
     end
-    ShowButton.Text = "Hide"
 end)
 
 HideButton.MouseButton1Click:Connect(function()
@@ -128,7 +127,6 @@ HideButton.MouseButton1Click:Connect(function()
             end 
         end
     end
-    ShowButton.Text = "Show"
 end)
 
 local ToggleButton = Instance.new("TextButton")
@@ -145,48 +143,40 @@ end
 ToggleButton.MouseButton1Click:Connect(toggleFrame)
 
 local UserInputService = game:GetService("UserInputService")
-local dragging, dragInput, startPos
 
-local function updateInput(input)
-    local delta = input.Position - dragInput
-    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+local function makeDraggable(guiElement)
+    local dragging, dragInput, startPos
+
+    local function updateInput(input)
+        local delta = input.Position - dragInput
+        guiElement.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    guiElement.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragInput = input.Position
+            startPos = guiElement.Position
+            input.InputChanged:Connect(function(newInput)
+                if newInput.UserInputType == Enum.UserInputType.MouseMovement then
+                    dragInput = newInput.Position
+                end
+            end)
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            updateInput(input)
+        end
+    end)
 end
 
-ToggleButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragInput = input.Position
-        startPos = Frame.Position
-        input.Changed:Wait()
-        dragging = false
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        updateInput(input)
-    end
-end)
-
-local buttonDragging, buttonInput, buttonStartPos
-
-local function buttonUpdateInput(input)
-    local delta = input.Position - buttonInput
-    PlaceButton.Position = UDim2.new(buttonStartPos.X.Scale, buttonStartPos.X.Offset + delta.X, buttonStartPos.Y.Scale, buttonStartPos.Y.Offset + delta.Y)
-end
-
-PlaceButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        buttonDragging = true
-        buttonInput = input.Position
-        buttonStartPos = PlaceButton.Position
-        input.Changed:Wait()
-        buttonDragging = false
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if buttonDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        buttonUpdateInput(input)
-    end
-end)
+makeDraggable(Frame)
+makeDraggable(ToggleButton)
