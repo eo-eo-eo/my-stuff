@@ -63,6 +63,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
+local PlaceRemote = ReplicatedStorage:WaitForChild("Place")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, snowdrake = 8, icecap = 9,
@@ -164,12 +165,7 @@ RainbowButton.MouseButton1Click:Connect(function()
                 wait(0)
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
-                local args = { [1] = math.random(1501, 1512) }
-                TitleRemote:FireServer(unpack(args))
-                wait(0)
-                local args = { [1] = 19 }
-                TitleRemote:FireServer(unpack(args))
-                wait(0.2)
+                wait(0.3)
             end
         end)()
     end
@@ -177,73 +173,51 @@ end)
 
 RandomTowerButton.MouseButton1Click:Connect(function()
     randomTowerLoopEnabled = not randomTowerLoopEnabled
-    RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Towers" or "Random Tower"
+    RandomTowerButton.Text = randomTowerLoopEnabled and "Stop Random Tower" or "Random Tower"
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local args = { [1] = math.random(1, 52), [2] = 1 }
+                local args = { [1] = math.random(1, 20), [2] = 2 }
                 EquipRemote:FireServer(unpack(args))
-                wait(0)
+                wait(0.1)
             end
         end)()
     end
 end)
 
 PlaceButton.MouseButton1Click:Connect(function()
-    print("Place button clicked!")
-end)
+    local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
+    monsterName = monsterName:gsub("%s+", "")
+    local monsterId = getMonsterId(monsterName)
+    if monsterId then
+        if not isNormal then
+            monsterId = monsterId - 1000
+        end
 
-local function makeDraggable(target)
-    local dragging = false
-    local dragInput, mousePos, framePos
+        local player = game.Players.LocalPlayer
+        local mouse = player:GetMouse()
+        local clicked = false
+        local position = nil
 
-    local function update(input)
-        local delta = input.Position - mousePos
-        target.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+        local function onClick()
+            position = mouse.Hit.p
+            clicked = true
+        end
+
+        mouse.Button1Down:Connect(onClick)
+
+        repeat
+            wait()
+        until clicked
+
+        mouse.Button1Down:Disconnect(onClick)
+
+        local args = {
+            [1] = monsterId,
+            [2] = CFrame.new(position) * CFrame.Angles(0, 0, 0),
+            [3] = not isNormal,
+            [4] = 0
+        }
+        PlaceRemote:FireServer(unpack(args))
     end
-
-    target.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            mousePos = input.Position
-            framePos = target.Position
-        end
-    end)
-
-    target.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-            update(input)
-        end
-    end)
-end
-
-makeDraggable(Frame)
-makeDraggable(Button1)
-makeDraggable(Button2)
-makeDraggable(Button3)
-makeDraggable(ToggleButton)
-makeDraggable(MorphButton)
-makeDraggable(RainbowButton)
-makeDraggable(RandomTowerButton)
-
-local DraggableButton = Instance.new("TextButton")
-DraggableButton.Size = UDim2.new(0.05, 0, 0.05, 0)
-DraggableButton.Position = UDim2.new(0.9, 0, 0, 0)
-DraggableButton.Text = "-"
-DraggableButton.Parent = ScreenGui
-
-DraggableButton.MouseButton1Click:Connect(function()
-    Frame.Visible = not Frame.Visible
-    DraggableButton.Text = Frame.Visible and "-" or "+"
 end)
-
-makeDraggable(DraggableButton)
-
-ToggleButton.Text = "Enable tower duping"
-loopEnabled = false
