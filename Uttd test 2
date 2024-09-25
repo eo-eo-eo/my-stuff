@@ -8,24 +8,7 @@ Frame.AnchorPoint = Vector2.new(0.5, 0.5)
 Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BackgroundTransparency = 0.5
 Frame.Visible = true
-Frame.Active = true
-Frame.Draggable = true
 Frame.Parent = ScreenGui
-
-local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0.05, 0, 0.05, 0)
-ToggleButton.Position = UDim2.new(0, 0, 0, 0)
-ToggleButton.Text = "-"
-ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ToggleButton.Parent = ScreenGui
-
-local isGuiVisible = true
-
-ToggleButton.MouseButton1Click:Connect(function()
-    isGuiVisible = not isGuiVisible
-    Frame.Visible = isGuiVisible
-    ToggleButton.Text = isGuiVisible and "-" or "+"
-end)
 
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
 AspectRatio.AspectRatio = 4 / 3
@@ -51,19 +34,32 @@ TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0, 0)
 TextBox.Text = "monsters name here"
 TextBox.Parent = ScrollingFrame
 
-local buttonWidth = 0.9
-local buttonHeight = 0.08
+local PlaceButton = Instance.new("TextButton")
+PlaceButton.Size = UDim2.new(0.9, 0, 0.1, 0)
+PlaceButton.Position = UDim2.new(0.5, -PlaceButton.Size.X.Offset / 2, 0.2, 0)
+PlaceButton.Text = "Place"
+PlaceButton.Parent = ScrollingFrame
 
-local function createButton(text)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(buttonWidth, 0, buttonHeight, 0)
-    button.Text = text
-    button.Parent = ScrollingFrame
-    return button
-end
+local SpecialNormalButton = Instance.new("TextButton")
+SpecialNormalButton.Size = UDim2.new(0.9, 0, 0.1, 0)
+SpecialNormalButton.Position = UDim2.new(0.5, -SpecialNormalButton.Size.X.Offset / 2, 0.3, 0)
+SpecialNormalButton.Text = "Normal"
+SpecialNormalButton.Parent = ScrollingFrame
+local isSpecial = false
 
-local PlaceButton = createButton("Place")
-local isNormal = true
+local ShowButton = Instance.new("TextButton")
+ShowButton.Size = UDim2.new(0.9, 0, 0.1, 0)
+ShowButton.Position = UDim2.new(0.5, -ShowButton.Size.X.Offset / 2, 0.4, 0)
+ShowButton.Text = "Show"
+ShowButton.Parent = ScrollingFrame
+
+local HideButton = Instance.new("TextButton")
+HideButton.Size = UDim2.new(0.9, 0, 0.1, 0)
+HideButton.Position = UDim2.new(0.5, -HideButton.Size.X.Offset / 2, 0.5, 0)
+HideButton.Text = "Hide"
+HideButton.Parent = ScrollingFrame
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7, snowdrake = 8, icecap = 9,
@@ -86,40 +82,111 @@ PlaceButton.MouseButton1Click:Connect(function()
     local monsterName = TextBox.Text:match("^%s*(.-)%s*$")
     monsterName = monsterName:gsub("%s+", "")
     local monsterId = getMonsterId(monsterName)
-
     if monsterId then
-        if not isNormal then
+        if isSpecial then
             monsterId = monsterId - 1000
         end
+        local args = { [1] = monsterId, [2] = CFrame.new(127.6947021484375, 100.8415298461914, 144.78549194335938), [3] = false, [4] = 0 }
+        PlaceButton.Text = "Waiting for click..."
+        local playerMouse = game.Players.LocalPlayer:GetMouse()
+        playerMouse.Button1Down:Wait()
+        local clickPosition = playerMouse.Hit.Position
+        args[2] = CFrame.new(clickPosition)
+        args[3] = isSpecial
+        game:GetService("ReplicatedStorage").Place:FireServer(unpack(args))
+        PlaceButton.Text = "Place"
+    end
+end)
 
-        local player = game.Players.LocalPlayer
-        local mouse = player:GetMouse()
-        local clicked = false
-        local position = nil
+SpecialNormalButton.MouseButton1Click:Connect(function()
+    isSpecial = not isSpecial
+    SpecialNormalButton.Text = isSpecial and "Special" or "Normal"
+end)
 
-        local function onClick()
-            position = mouse.Hit.p
-            clicked = true
+ShowButton.MouseButton1Click:Connect(function()
+    local specificPartNames = {"green", "green2", "red"}
+    for _, object in pairs(workspace:GetDescendants()) do
+        if object:IsA("BasePart") and object.Transparency == 1 then
+            for _, name in ipairs(specificPartNames) do
+                if object.Name == name then
+                    object.Transparency = 0
+                end
+            end 
         end
+    end
+    ShowButton.Text = "Hide"
+end)
 
-        -- Listen for mouse click on the game world
-        local clickConnection = mouse.Button1Down:Connect(onClick)
-
-        repeat
-            wait()
-        until clicked
-
-        clickConnection:Disconnect()
-
-        if position then
-            local args = {
-                [1] = monsterId,
-                [2] = CFrame.new(position.x, position.y, position.z) * CFrame.Angles(0, 0, 0),
-                [3] = not isNormal,
-                [4] = 0
-            }
-
-            game:GetService("ReplicatedStorage").Place:FireServer(unpack(args))
+HideButton.MouseButton1Click:Connect(function()
+    local specificPartNames = {"green", "green2", "red"}
+    for _, object in pairs(workspace:GetDescendants()) do
+        if object:IsA("BasePart") and object.Transparency == 0 then
+            for _, name in ipairs(specificPartNames) do
+                if object.Name == name then
+                    object.Transparency = 1
+                end
+            end 
         end
+    end
+    ShowButton.Text = "Show"
+end)
+
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0.05, 0, 0.05, 0)
+ToggleButton.Position = UDim2.new(0.95, 0, 0, 0)
+ToggleButton.Text = "+"
+ToggleButton.Parent = ScreenGui
+
+local function toggleFrame()
+    Frame.Visible = not Frame.Visible
+    ToggleButton.Text = Frame.Visible and "-" or "+"
+end
+
+ToggleButton.MouseButton1Click:Connect(toggleFrame)
+
+local UserInputService = game:GetService("UserInputService")
+local dragging, dragInput, startPos
+
+local function updateInput(input)
+    local delta = input.Position - dragInput
+    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+ToggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragInput = input.Position
+        startPos = Frame.Position
+        input.Changed:Wait()
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        updateInput(input)
+    end
+end)
+
+local buttonDragging, buttonInput, buttonStartPos
+
+local function buttonUpdateInput(input)
+    local delta = input.Position - buttonInput
+    PlaceButton.Position = UDim2.new(buttonStartPos.X.Scale, buttonStartPos.X.Offset + delta.X, buttonStartPos.Y.Scale, buttonStartPos.Y.Offset + delta.Y)
+end
+
+PlaceButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        buttonDragging = true
+        buttonInput = input.Position
+        buttonStartPos = PlaceButton.Position
+        input.Changed:Wait()
+        buttonDragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if buttonDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        buttonUpdateInput(input)
     end
 end)
