@@ -102,21 +102,24 @@ PlaceButton.MouseButton1Click:Connect(function()
             clicked = true
         end
 
-        mouse.Button1Down:Connect(onClick)
+        -- Listen for mouse click on the game world
+        local clickConnection = mouse.Button1Down:Connect(onClick)
 
         repeat
             wait()
         until clicked
 
-        mouse.Button1Down:Disconnect(onClick)
+        clickConnection:Disconnect()
 
-        local args = {
-            [1] = monsterId,
-            [2] = CFrame.new(position.x, position.y, position.z) * CFrame.Angles(0, 0, 0),
-            [3] = not isNormal,
-            [4] = 0
-        }
+        if position then
+            local args = {
+                [1] = monsterId,
+                [2] = CFrame.new(position.x, position.y, position.z) * CFrame.Angles(0, 0, 0),
+                [3] = not isNormal,
+                [4] = 0
+            }
 
-        game:GetService("ReplicatedStorage").Place:FireServer(unpack(args))
+            game:GetService("ReplicatedStorage").Place:FireServer(unpack(args))
+        end
     end
 end)
