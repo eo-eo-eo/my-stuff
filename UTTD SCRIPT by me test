@@ -55,22 +55,14 @@ local function createNewButtons()
     newButton2.Text = "UTTD GUI for Slow Device"
     newButton2.Parent = screenGui
 
-    local function handleButtonClick(clickedButton, scriptUrl)
-        if game.PlaceId == 6849018101 then
-            loadstring(game:HttpGet(scriptUrl, true))()
-            destroyAllButtons()
-        else
-            destroyAllButtons()
-            clickedButton.Text = "Wrong game you silly goober"
-        end
-    end
-
     newButton1.MouseButton1Click:Connect(function()
-        handleButtonClick(newButton1, "https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20fast%20device")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20fast%20device", true))()
+        destroyAllButtons()
     end)
 
     newButton2.MouseButton1Click:Connect(function()
-        handleButtonClick(newButton2, "https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20slow%20device")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20slow%20device", true))()
+        destroyAllButtons()
     end)
 end
 
