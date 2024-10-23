@@ -5,7 +5,8 @@ local validKeys = {
     ["alexmaster0914-3ezrk6MDonPQrUi2SxidABTMDMot4D3e9UotL2akxdEjRr2C3mthDferN5kc4cgCporG4AbS6N6SHAx5Myy2puHvoo5pndEjRZzAhWebhLKWP2SpdahP83XzUrB43pHW"] = 975332451,
     ["randaaalll-5CXQLe33V6ipWpLs2Z85MVp7ddFxuzKvKS93spnhJdqpctBzN83bKY3kkeE3L9WFygshvHAeDWARWJi643zefARvskvhcqcEowrH2DiJp29ouQ4dfaNt6QG8azseyuMf"] = 5518947076,
     ["avretyk-rvuFZ7rSC8D5P8LnBNSPL8Z98UTNeDBgNuqx6jmgXLTquerHc3niMkdYadaxnXwwKKBdiT8nFPd6Eb6BXiSLZrmbgYV6PSZZbVTzns7j4yCSBMoYHajACTCYRTCNNaBe"] = 1618181080,
-    ["Goombella_Plays-bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"] = 4797364268
+    ["Goombella_Plays-bTFH8GDDcNEoBCDM9i8otMN55j7b6aPZwLvkEYQFdCW6uyHpmbUv969o3u3BwuWS28bQUXb2FnQXdzcGYLqxZeRKPNZkY3VrPG6xychYfrstDU9rF2PkEMLPXt5AwZAE"] = 4797364268,
+    ["xSpeakerx-m4N8fJsxF1D2qH9tQwR6dU5yP7vZ8kX0aV3jL2bG7cN9pJ4eY6mA5qW7rB2xH9tK0nS8vU5yT3cL4eY6mF5qR7pX9wZ2kD9aS7rT4cG"] = 118958032 
 }
 
 local screenGui = Instance.new("ScreenGui")
