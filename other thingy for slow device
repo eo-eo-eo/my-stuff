@@ -185,6 +185,8 @@ RandomTowerButton.MouseButton1Click:Connect(function()
             while randomTowerLoopEnabled do
                 local args = { [1] = math.random(1, 52), [2] = 1 }
                 EquipRemote:FireServer(unpack(args))
+                local args = { [1] = math.random(1001, 10013), [2] = 1 }
+                Equip2Remote:FireServer(unpack(args))
                 wait(0)
             end
         end)()
