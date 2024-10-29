@@ -44,20 +44,14 @@ local function createNewButtons()
     local newButton1 = Instance.new("TextButton")
     newButton1.Size = UDim2.new(0, 200, 0, 50)
     newButton1.Position = UDim2.new(0.5, -250, 0.6, 0)
-    newButton1.Text = "UTTD GUI for Fast Device"
+    newButton1.Text = "UTTD GUI for Lobby"
     newButton1.Parent = screenGui
 
     local newButton2 = Instance.new("TextButton")
     newButton2.Size = UDim2.new(0, 200, 0, 50)
     newButton2.Position = UDim2.new(0.5, 50, 0.6, 0)
-    newButton2.Text = "UTTD GUI for Slow Device"
+    newButton2.Text = "In Game UTTD Script"
     newButton2.Parent = screenGui
-
-    local newButton3 = Instance.new("TextButton")
-    newButton3.Size = UDim2.new(0, 200, 0, 50)
-    newButton3.Position = UDim2.new(0.5, -100, 0.7, 0)
-    newButton3.Text = "In Game UTTD Script"
-    newButton3.Parent = screenGui
 
     newButton1.MouseButton1Click:Connect(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20fast%20device", true))()
@@ -65,11 +59,6 @@ local function createNewButtons()
     end)
 
     newButton2.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20for%20slow%20device", true))()
-        destroyAllButtons()
-    end)
-
-    newButton3.MouseButton1Click:Connect(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/other%20thingy%20ingame", true))()
         destroyAllButtons()
     end)
