@@ -191,7 +191,7 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
-DecreaseLagButtonAntiKick.MouseButton1Click:Connect(function()
+DecreaseLagAntiKickButton.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))() 
 
  local VirtualUser = game:GetService('VirtualUser')
