@@ -1,10 +1,3 @@
-local VirtualUser = game:GetService('VirtualUser')
-
-game:GetService('Players').LocalPlayer.Idled:Connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
-end)
-
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -59,7 +52,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-local DecreaseLagButton = createButton("Decrease Lag")
+local DecreaseLag+AntiKick = createButton("DecreaseLag+AntiKick")
 
 local loopEnabled = false
 local isNormal = true
@@ -199,5 +192,11 @@ RandomTowerButton.MouseButton1Click:Connect(function()
 end)
 
 DecreaseLagButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))() 
+
+ local VirtualUser = game:GetService('VirtualUser')
+ game:GetService('Players').LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+ end)
 end)
