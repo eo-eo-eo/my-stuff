@@ -52,7 +52,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-local DecreaseLagButton = createButton("Decrease Lag + Anti Kick")
+local DecreaseLag+AntiKickButton = createButton("Decrease Lag + Anti Kick")
 
 local loopEnabled = false
 local isNormal = true
