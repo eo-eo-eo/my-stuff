@@ -52,7 +52,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-local DecreaseLag+AntiKickButton = createButton("Decrease Lag + Anti Kick")
+local DecreaseLagAntiKickButton = createButton("Decrease Lag + Anti Kick")
 
 local loopEnabled = false
 local isNormal = true
@@ -191,7 +191,7 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     end
 end)
 
-DecreaseLag+AntikickButton.MouseButton1Click:Connect(function()
+DecreaseLagAntikickButton.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))() 
 
  local VirtualUser = game:GetService('VirtualUser')
