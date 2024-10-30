@@ -92,6 +92,10 @@ local function runLoop(monsterId)
         EquipRemote:FireServer(unpack(args2))
         local args3 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args3))
+        local args3 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args3))
+        local args3 = { [1] = monsterId, [2] = 2 }
+        EquipRemote:FireServer(unpack(args3))
         wait(0.1)
     end
 end
