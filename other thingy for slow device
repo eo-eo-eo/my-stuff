@@ -1,3 +1,10 @@
+local VirtualUser = game:GetService('VirtualUser')
+
+game:GetService('Players').LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -52,7 +59,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-local DecreaseLagAntiKickButton = createButton("Decrease Lag + Anti Kick")
+local DecreaseLagButton = createButton("Decrease Lag")
 
 local loopEnabled = false
 local isNormal = true
@@ -97,7 +104,7 @@ local function runLoop(monsterId)
         EquipRemote:FireServer(unpack(args4))
         local args5 = { [1] = monsterId, [2] = 2 }
         EquipRemote:FireServer(unpack(args5))
-        wait(0.2)
+        wait(0.1)
     end
 end
 
@@ -166,9 +173,10 @@ RainbowButton.MouseButton1Click:Connect(function()
             while rainbowLoopEnabled do
                 local args = { [1] = 19 }
                 TitleRemote:FireServer(unpack(args))
+                wait(0.3)
                 args = { [1] = 20 }
                 TitleRemote:FireServer(unpack(args))
-                wait(0)
+                wait(0.3)
             end
         end)()
     end
@@ -183,20 +191,15 @@ RandomTowerButton.MouseButton1Click:Connect(function()
                 local monsterId = monsterMapping[math.random(1, 1013)]
                 if monsterId then
                     EquipRemote:FireServer(monsterId, 1)
+                    wait(0.5)
                     EquipRemote:FireServer(monsterId, 2)
-                    wait(0.2)
+                    wait(0.5)
                 end
             end
         end)()
     end
 end)
 
-DecreaseLagAntiKickButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))() 
-
- local VirtualUser = game:GetService('VirtualUser')
- game:GetService('Players').LocalPlayer.Idled:Connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
- end)
+DecreaseLagButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))()
 end)
