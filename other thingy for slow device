@@ -59,13 +59,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
-local DecreaseLagButton = createButton("Decrease Lag") -- New button
-
-local ToggleGuiButton = Instance.new("TextButton")
-ToggleGuiButton.Size = UDim2.new(0.05, 0, 0.05, 0)
-ToggleGuiButton.Position = UDim2.new(0.95, 0, 0, 0)
-ToggleGuiButton.Text = "-"
-ToggleGuiButton.Parent = Frame
+local DecreaseLagButton = createButton("Decrease Lag")
 
 local loopEnabled = false
 local isNormal = true
@@ -167,20 +161,19 @@ MorphButton.MouseButton1Click:Connect(function()
     local monsterId = getMonsterId(monsterName)
     if monsterId then
         local args = { [1] = monsterId + 1000 }
-        EquipRemote:FireServer(unpack(args))
+        TitleRemote:FireServer(unpack(args))
     end
 end)
 
 RainbowButton.MouseButton1Click:Connect(function()
     rainbowLoopEnabled = not rainbowLoopEnabled
-    RainbowButton.Text = rainbowLoopEnabled and "Stop Random Rainbow Title" or "Random Rainbow Title"
+    RainbowButton.Text = rainbowLoopEnabled and "Stop Rainbow Title" or "Random Rainbow Title"
     if rainbowLoopEnabled then
         coroutine.wrap(function()
             while rainbowLoopEnabled do
-                local randomTitle = math.random(1, 100)
-                local args = { [1] = randomTitle }
+                local args = { [1] = math.random(1, 100) }
                 TitleRemote:FireServer(unpack(args))
-                wait(0.5)
+                wait(1)
             end
         end)()
     end
@@ -192,8 +185,9 @@ RandomTowerButton.MouseButton1Click:Connect(function()
     if randomTowerLoopEnabled then
         coroutine.wrap(function()
             while randomTowerLoopEnabled do
-                local randomMonsterId = math.random(1, 100)
-                fireEquipRemote(randomMonsterId, 1)
+                local randomId = math.random(1, 1000)
+                local args = { [1] = randomId }
+                EquipRemote:FireServer(unpack(args))
                 wait(1)
             end
         end)()
@@ -201,10 +195,18 @@ RandomTowerButton.MouseButton1Click:Connect(function()
 end)
 
 DecreaseLagButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/main/other%20thingy%20test"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))()
 end)
 
-ToggleGuiButton.MouseButton1Click:Connect(function()
+local toggleFrameButton = Instance.new("TextButton")
+toggleFrameButton.Size = UDim2.new(0.05, 0, 0.05, 0)
+toggleFrameButton.Position = UDim2.new(0.95, 0, 0.05, 0)
+toggleFrameButton.Text = "-"
+toggleFrameButton.Parent = ScreenGui
+
+local function toggleFrame()
     Frame.Visible = not Frame.Visible
-    ToggleGuiButton.Text = Frame.Visible and "-" or "+"
-end)
+    toggleFrameButton.Text = Frame.Visible and "-" or "+"
+end
+
+toggleFrameButton.MouseButton1Click:Connect(toggleFrame)
