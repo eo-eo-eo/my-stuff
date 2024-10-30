@@ -1,12 +1,3 @@
-local VirtualUser = game:GetService('VirtualUser')
-
-game:GetService('Players').LocalPlayer.Idled:Connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
-end)
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0.4, 0, 0.8, 0)
 Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2)
@@ -58,6 +49,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
+local AntiLagAntiKick = createButton("AntiLag+AntiKick")
 
 local loopEnabled = false
 local isNormal = true
@@ -241,6 +233,7 @@ makeDraggable(ToggleButton)
 makeDraggable(MorphButton)
 makeDraggable(RainbowButton)
 makeDraggable(RandomTowerButton)
+makeDraggable(AntiLagAntiKick)
 
 local DraggableButton = Instance.new("TextButton")
 DraggableButton.Size = UDim2.new(0.05, 0, 0.05, 0)
@@ -257,3 +250,13 @@ makeDraggable(DraggableButton)
 
 ToggleButton.Text = "Enable tower duping"
 loopEnabled = false
+
+AntiLagAntiKick.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/eo-eo-eo/my-stuff/refs/heads/main/Antilag", true))() 
+
+ local VirtualUser = game:GetService('VirtualUser')
+ game:GetService('Players').LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+ end)
+end)
