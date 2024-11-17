@@ -11,7 +11,7 @@ Frame.Visible = true
 Frame.Parent = ScreenGui
 
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
-AspectRatio.AspectRatio = 4 / 3
+AspectRatio.AspectRatio = workspace.CurrentCamera.ViewportSize.X / workspace.CurrentCamera.ViewportSize.Y
 AspectRatio.Parent = Frame
 
 local ScrollingFrame = Instance.new("ScrollingFrame")
@@ -58,6 +58,18 @@ HideButton.Size = UDim2.new(0.9, 0, 0.1, 0)
 HideButton.Position = UDim2.new(0.5, -HideButton.Size.X.Offset / 2, 0.5, 0)
 HideButton.Text = "Hide"
 HideButton.Parent = ScrollingFrame
+
+local FightButton = Instance.new("TextButton")
+FightButton.Size = UDim2.new(0.9, 0, 0.1, 0)
+FightButton.Position = UDim2.new(0.5, -FightButton.Size.X.Offset / 2, 0.6, 0)
+FightButton.Text = "Fight"
+FightButton.Parent = ScrollingFrame
+
+local SpareButton = Instance.new("TextButton")
+SpareButton.Size = UDim2.new(0.9, 0, 0.1, 0)
+SpareButton.Position = UDim2.new(0.5, -SpareButton.Size.X.Offset / 2, 0.7, 0)
+SpareButton.Text = "Spare"
+SpareButton.Parent = ScrollingFrame
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -180,3 +192,13 @@ end
 
 makeDraggable(Frame)
 makeDraggable(ToggleButton)
+
+FightButton.MouseButton1Click:Connect(function()
+    local args = { [1] = 2 }
+    game:GetService("ReplicatedStorage").FightMode:FireServer(unpack(args))
+end)
+
+SpareButton.MouseButton1Click:Connect(function()
+    local args = { [1] = 1 }
+    game:GetService("ReplicatedStorage").FightMode:FireServer(unpack(args))
+end)
