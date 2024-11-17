@@ -11,7 +11,7 @@ Frame.Visible = true
 Frame.Parent = ScreenGui
 
 local AspectRatio = Instance.new("UIAspectRatioConstraint")
-AspectRatio.AspectRatio = 4 / 3
+AspectRatio.AspectRatio = workspace.CurrentCamera.ViewportSize.X / workspace.CurrentCamera.ViewportSize.Y
 AspectRatio.Parent = Frame
 
 local ScrollingFrame = Instance.new("ScrollingFrame")
@@ -192,3 +192,13 @@ end
 
 makeDraggable(Frame)
 makeDraggable(ToggleButton)
+
+FightButton.MouseButton1Click:Connect(function()
+    local args = { [1] = 2 }
+    game:GetService("ReplicatedStorage").FightMode:FireServer(unpack(args))
+end)
+
+SpareButton.MouseButton1Click:Connect(function()
+    local args = { [1] = 1 }
+    game:GetService("ReplicatedStorage").FightMode:FireServer(unpack(args))
+end)
