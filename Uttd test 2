@@ -69,7 +69,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
-local JoinRemote = ReplicatedStorage:WaitForChild("Join")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7,
@@ -106,10 +105,10 @@ end
 
 JoinMapButton.MouseButton1Click:Connect(function()
     local mapName = TextBox.Text:match("^%s*(.-)%s*$")
-    mapName = mapName:gsub("%s+", "")
     local mapZone = getMapZone(mapName)
     if mapZone then
-fireJoinRemote(mapZone)
+        local args = { [1] = mapZone }
+        game:GetService("ReplicatedStorage").Join:FireServer(unpack(args))
     end
 end)
 
