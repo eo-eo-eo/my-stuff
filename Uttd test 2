@@ -58,6 +58,7 @@ local ToggleButton = createButton("Enable tower duping")
 local MorphButton = createButton("Morph")
 local RainbowButton = createButton("Random Rainbow Title")
 local RandomTowerButton = createButton("Random Tower")
+local JoinMapButton = createButton("Join Map")
 
 local loopEnabled = false
 local isNormal = true
@@ -68,6 +69,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local EquipRemote = ReplicatedStorage:WaitForChild("Equip")
 local Equip2Remote = ReplicatedStorage:WaitForChild("Equip2")
 local TitleRemote = ReplicatedStorage:WaitForChild("Title")
+local JoinRemote = ReplicatedStorage:WaitForChild("Join")
 
 local monsterMapping = {
     froggit = 1, vegetoid = 2, loox = 3, migosp = 4, moldsmal = 5, whimsum = 6, napstablook = 7,
@@ -88,6 +90,28 @@ local monsterMapping = {
 local function getMonsterId(monsterName)
     return monsterMapping[monsterName] or monsterMapping[monsterName:lower()] or nil
 end
+
+local mapMapping = {
+    Ruins = "Zona1", Snowdin = "Zona2", Waterfall = "Zona3", Hotland = "Zona4", Core = "Zona5",
+    GenocideRuins = "Zona1b", GenocideSnowdin = "Zona2b", GenocideWaterfall = "Zona3b", GenocideHotland = "Zona4b", GenocideCore = "Zona5b",
+    NewHome = "Zona01", TheEnd = "Zona02", LastCorridor = "Zona03", TrueLab = "Zona05", Sandbox = "Zona06",
+    RandomizerOfChaos = "ZonaDelta01", FieldEntrance = "ZonaDelta1", Halfway = "ZonaDelta2", ShopInTheField = "ZonaDelta3",
+    ForestEntrance = "ZonaDelta4", MasterSmith = "ZonaDelta5", LastStretch = "ZonaDelta6", CastleGate = "ZonaDelta7",
+    DarkPrison = "ZonaDelta8", ThroneRoom = "ZonaDelta9"
+}
+
+local function getMapZone(mapName)
+    return mapMapping[mapName] or nil
+end
+
+JoinMapButton.MouseButton1Click:Connect(function()
+    local mapName = TextBox.Text:match("^%s*(.-)%s*$")
+    mapName = mapName:gsub("%s+", "")
+    local mapZone = getMapZone(mapName)
+    if mapZone then
+fireJoinRemote(mapZone)
+    end
+end)
 
 local function runLoop(monsterId)
     while loopEnabled do
