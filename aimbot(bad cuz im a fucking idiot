@@ -1,0 +1,179 @@
+local Players = game:GetService("Players")
+local Camera = game:GetService("Workspace").CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+
+local defaultDistance = 4
+local minDistance = 2
+local maxDistance = 10
+local distanceSpeed = 2
+local currentDistance = defaultDistance
+
+local isAimAssistEnabled = true
+local isFocused = false
+local isClicking = false
+
+local function getNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+            local distance = (LocalPlayer.Character.HumanoidRootPart.Position - player.Character.Head.Position).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = player
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+local function createBodyOutline(player)
+    if player == LocalPlayer then return end
+    if not player.Character then return end
+
+    if not player.Character:FindFirstChild("BodyOutline") then
+        local bodyOutline = Instance.new("SelectionBox")
+        bodyOutline.Name = "BodyOutline"
+        bodyOutline.Adornee = player.Character
+        bodyOutline.Color3 = Color3.fromRGB(255, 0, 0)
+        bodyOutline.LineThickness = 0.2
+        bodyOutline.Transparency = 0.6
+        bodyOutline.SurfaceTransparency = 1
+        bodyOutline.Parent = player.Character
+
+        bodyOutline.Enabled = true
+        bodyOutline.ZIndex = 10
+    end
+end
+
+local function smoothCameraTransition(targetCFrame)
+    Camera.CFrame = Camera.CFrame:Lerp(targetCFrame, 0.1)
+end
+
+local function updateCameraAndOrientation()
+    if not isAimAssistEnabled then
+        if isFocused then
+            Camera.CameraType = Enum.CameraType.Custom
+            Camera.CameraSubject = LocalPlayer.Character.HumanoidRootPart
+            isFocused = false
+        end
+        return
+    end
+
+    local nearestPlayer = getNearestPlayer()
+
+    if nearestPlayer and nearestPlayer.Character and nearestPlayer.Character:FindFirstChild("Head") then
+        local headPosition = nearestPlayer.Character.Head.Position
+        local humanoidRootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+        if humanoidRootPart then
+            humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, headPosition)
+
+            local lookAtDirection = (headPosition - humanoidRootPart.Position).unit
+            local flatLookAtDirection = Vector3.new(lookAtDirection.X, 0, lookAtDirection.Z)
+
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, humanoidRootPart.Position + flatLookAtDirection)
+
+            local offsetBehind = Vector3.new(0, 2, -currentDistance)
+            local cameraPosition = humanoidRootPart.Position + offsetBehind
+            local lookAtPosition = headPosition
+
+            Camera.CFrame = CFrame.new(cameraPosition, lookAtPosition)
+        end
+
+        isFocused = true
+    else
+        if isFocused then
+            Camera.CameraType = Enum.CameraType.Custom
+            Camera.CameraSubject = LocalPlayer.Character.HumanoidRootPart
+            isFocused = false
+        end
+    end
+end
+
+local function onZoomInput(input)
+    if input.UserInputType == Enum.UserInputType.MouseWheel then
+        if input.Position.Z > 0 then
+            currentDistance = math.max(minDistance, currentDistance - distanceSpeed)
+        elseif input.Position.Z < 0 then
+            currentDistance = math.min(maxDistance, currentDistance + distanceSpeed)
+        end
+    end
+end
+
+local function toggleAimAssist(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.Q then
+        isAimAssistEnabled = not isAimAssistEnabled
+    end
+end
+
+local function isPlayerInCenterOfScreen(player)
+    local headPosition = player.Character and player.Character:FindFirstChild("Head")
+    if headPosition then
+        local screenPosition, onScreen = Camera:WorldToViewportPoint(headPosition.Position)
+        return onScreen and screenPosition.X >= (Camera.ViewportSize.X / 2 - 50) and screenPosition.X <= (Camera.ViewportSize.X / 2 + 50)
+    end
+    return false
+end
+
+local function startClicking()
+    if not isClicking then
+        isClicking = true
+        while isClicking do
+            local nearestPlayer = getNearestPlayer()
+            if nearestPlayer and isPlayerInCenterOfScreen(nearestPlayer) then
+                game:GetService("VirtualInputManager"):InputBegin(Enum.UserInputType.MouseButton1)
+                game:GetService("VirtualInputManager"):InputEnd(Enum.UserInputType.MouseButton1)
+            end
+            wait(0.1)
+        end
+    end
+end
+
+local function stopClicking()
+    isClicking = false
+end
+
+UserInputService.InputChanged:Connect(onZoomInput)
+UserInputService.InputBegan:Connect(toggleAimAssist)
+
+RunService.RenderStepped:Connect(function()
+    updateCameraAndOrientation()
+    local nearestPlayer = getNearestPlayer()
+    if nearestPlayer and isPlayerInCenterOfScreen(nearestPlayer) then
+        startClicking()
+    else
+        stopClicking()
+    end
+end)
+
+local function updateBodyOutlines()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            if player.Character and player.Character:FindFirstChild("Head") then
+                createBodyOutline(player)
+            end
+        end
+    end
+end
+
+RunService.Heartbeat:Connect(function()
+    updateBodyOutlines()
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        player.CharacterAdded:Connect(function(character)
+            createBodyOutline(player)
+        end)
+        if player.Character then
+            createBodyOutline(player)
+        end
+    end
+end
