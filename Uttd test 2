@@ -105,6 +105,7 @@ end
 
 JoinMapButton.MouseButton1Click:Connect(function()
     local mapName = TextBox.Text:match("^%s*(.-)%s*$")
+    mapName = mapName:gsub("%s+", ""):lower()
     local mapZone = getMapZone(mapName)
     if mapZone then
         local args = { [1] = mapZone }
