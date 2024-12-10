@@ -1,4 +1,4 @@
-local VirtualUser = game:GetService('VirtualUser')
+1local VirtualUser = game:GetService('VirtualUser')
 
 game:GetService('Players').LocalPlayer.Idled:Connect(function()
     VirtualUser:CaptureController()
@@ -37,7 +37,7 @@ UIListLayout.Padding = UDim.new(0, 10)
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0.9, 0, 0.1, 0)
 TextBox.Position = UDim2.new(0.5, -TextBox.Size.X.Offset / 2, 0, 0)
-TextBox.Text = "monsters name here"
+TextBox.Text = "monsters name or map name here"
 TextBox.Parent = ScrollingFrame
 
 local buttonWidth = 0.9
