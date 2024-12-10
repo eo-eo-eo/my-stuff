@@ -1,4 +1,4 @@
-1local VirtualUser = game:GetService('VirtualUser')
+local VirtualUser = game:GetService('VirtualUser')
 
 game:GetService('Players').LocalPlayer.Idled:Connect(function()
     VirtualUser:CaptureController()
