@@ -91,12 +91,12 @@ local function getMonsterId(monsterName)
 end
 
 local mapMapping = {
-    Ruins = "Zona1", Snowdin = "Zona2", Waterfall = "Zona3", Hotland = "Zona4", Core = "Zona5",
-    GenocideRuins = "Zona1b", GenocideSnowdin = "Zona2b", GenocideWaterfall = "Zona3b", GenocideHotland = "Zona4b", GenocideCore = "Zona5b",
-    NewHome = "Zona01", TheEnd = "Zona02", LastCorridor = "Zona03", TrueLab = "Zona05", Sandbox = "Zona06",
-    RandomizerOfChaos = "ZonaDelta01", FieldEntrance = "ZonaDelta1", Halfway = "ZonaDelta2", ShopInTheField = "ZonaDelta3",
-    ForestEntrance = "ZonaDelta4", MasterSmith = "ZonaDelta5", LastStretch = "ZonaDelta6", CastleGate = "ZonaDelta7",
-    DarkPrison = "ZonaDelta8", ThroneRoom = "ZonaDelta9"
+    ruins = "Zona1", snowdin = "Zona2", waterfall = "Zona3", hotland = "Zona4", core = "Zona5",
+    genocideruins = "Zona1b", genocidesnowdin = "Zona2b", genocidewaterfall = "Zona3b", genocidehotland = "Zona4b", genocidecore = "Zona5b",
+    newhome = "Zona01", theend = "Zona02", lastcorridor = "Zona03", truelab = "Zona05", sandbox = "Zona06",
+    randomizerofchaos = "ZonaDelta01", fieldentrance = "ZonaDelta1", halfway = "ZonaDelta2", shopinthefield = "ZonaDelta3",
+    forestentrance = "ZonaDelta4", mastersmith = "ZonaDelta5", laststretch = "ZonaDelta6", castlegate = "ZonaDelta7",
+    darkprison = "ZonaDelta8", throneroom = "ZonaDelta9"
 }
 
 local function getMapZone(mapName)
