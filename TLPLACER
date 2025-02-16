@@ -1,0 +1,491 @@
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 400)
+frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.Parent = screenGui
+
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Size = UDim2.new(1, 0, 1, -40)
+scrollFrame.Position = UDim2.new(0, 0, 0, 40)
+scrollFrame.BackgroundTransparency = 1
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 1000)
+scrollFrame.Parent = frame
+
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.Padding = UDim.new(0, 10)
+uiListLayout.FillDirection = Enum.FillDirection.Vertical
+uiListLayout.Parent = scrollFrame
+
+local button1 = Instance.new("TextButton")
+button1.Size = UDim2.new(1, -20, 0, 50)
+button1.Position = UDim2.new(0, 10, 0, 0)
+button1.Text = "Parsnik1 14kg needed"
+button1.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button1.TextColor3 = Color3.fromRGB(255, 255, 255)
+button1.Name = "Button1"
+button1.Parent = scrollFrame
+
+button1.MouseButton1Click:Connect(function()
+   local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+end)
+
+local button2 = Instance.new("TextButton")
+button2.Size = UDim2.new(1, -20, 0, 50)
+button2.Position = UDim2.new(0, 10, 0, 60)
+button2.Text = "Parsnik2 14kg needed"
+button2.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button2.TextColor3 = Color3.fromRGB(255, 255, 255)
+button2.Name = "Button2"
+button2.Parent = scrollFrame
+
+button2.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+
+end)
+
+local button3 = Instance.new("TextButton")
+button3.Size = UDim2.new(1, -20, 0, 50)
+button3.Position = UDim2.new(0, 10, 0, 120)
+button3.Text = "Glyde1 32kg needed"
+button3.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button3.TextColor3 = Color3.fromRGB(255, 255, 255)
+button3.Name = "Button3"
+button3.Parent = scrollFrame
+
+button3.MouseButton1Click:Connect(function()
+ local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+end)
+
+local button4 = Instance.new("TextButton")
+button4.Size = UDim2.new(1, -20, 0, 50)
+button4.Position = UDim2.new(0, 10, 0, 180)
+button4.Text = "Glyde2 32kg needed"
+button4.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button4.TextColor3 = Color3.fromRGB(255, 255, 255)
+button4.Name = "Button4"
+button4.Parent = scrollFrame
+
+button4.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+end)
+
+local button5 = Instance.new("TextButton")
+button5.Size = UDim2.new(1, -20, 0, 50)
+button5.Position = UDim2.new(0, 10, 0, 240)
+button5.Text = "Knight1 34kg needed"
+button5.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button5.TextColor3 = Color3.fromRGB(255, 255, 255)
+button5.Name = "Button5"
+button5.Parent = scrollFrame
+
+button5.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(18.861618, 383.094055, 22.0731602, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(18.861618, 383.094055, 22.0731602, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(18.861618, 383.094055, 22.0731602, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(18.861618, 383.094055, 22.0731602, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(18.861618, 383.094055, 22.0731602, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+
+end)
+
+local button6 = Instance.new("TextButton")
+button6.Size = UDim2.new(1, -20, 0, 50)
+button6.Position = UDim2.new(0, 10, 0, 300)
+button6.Text = "Knight2 34kg needed"
+button6.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button6.TextColor3 = Color3.fromRGB(255, 255, 255)
+button6.Name = "Button6"
+button6.Parent = scrollFrame
+
+button6.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+end)
+
+local button7 = Instance.new("TextButton")
+button7.Size = UDim2.new(1, -20, 0, 50)
+button7.Position = UDim2.new(0, 10, 0, 360)
+button7.Text = "Moldessa1 15kg needed"
+button7.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button7.TextColor3 = Color3.fromRGB(255, 255, 255)
+button7.Name = "Button7"
+button7.Parent = scrollFrame
+
+button7.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+end)
+
+local button8 = Instance.new("TextButton")
+button8.Size = UDim2.new(1, -20, 0, 50)
+button8.Position = UDim2.new(0, 10, 0, 420)
+button8.Text = "Moldessa2 15kg needed"
+button8.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button8.TextColor3 = Color3.fromRGB(255, 255, 255)
+button8.Name = "Button8"
+button8.Parent = scrollFrame
+
+button8.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+end)
+
+local dragging
+local dragStart
+local startPos
+local TweenService = game:GetService("TweenService")
+
+local function update(input)
+    local delta = input.Position - dragStart
+    local newPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    
+    local tween = TweenService:Create(frame, TweenInfo.new(0.1, Enum.EasingStyle.Linear), {Position = newPos})
+    tween:Play()
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+    end
+end)
+
+frame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        update(input)
+    end
+end)
+
+local isVisible = true
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.X then
+        isVisible = not isVisible
+        frame.Visible = isVisible
+    end
+end)
