@@ -70,6 +70,46 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+   local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))   
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(37.8275986, 383.094055, 42.2782135, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 3125;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 end)
 
 local button2 = Instance.new("TextButton")
@@ -122,7 +162,46 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
 
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 50;
+    [2] = CFrame.new(-9.64400864, 383.094055, -14.1523552, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08);
+    [3] = false;
+    [4] = 2240;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 end)
 
 local button3 = Instance.new("TextButton")
@@ -175,6 +254,46 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+ local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args)) 
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(33.5753098, 387.88269, 49.284771, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 end)
 
 local button4 = Instance.new("TextButton")
@@ -187,6 +306,46 @@ button4.Name = "Button4"
 button4.Parent = scrollFrame
 
 button4.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 43;
+    [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 local args = {
     [1] = 43;
     [2] = CFrame.new(-6.62330151, 387.914642, -12.9029284, 1, 0, 0, 0, 1, 0, 0, 0, 1);
@@ -342,6 +501,54 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 31;
+    [2] = CFrame.new(12.4702759, 383.094055, 11.1167831, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 end)
 
 local button7 = Instance.new("TextButton")
@@ -394,6 +601,46 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(37.0656853, 383.094055, 50.3605156, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 end)
 
 local button8 = Instance.new("TextButton")
@@ -406,6 +653,46 @@ button8.Name = "Button8"
 button8.Parent = scrollFrame
 
 button8.MouseButton1Click:Connect(function()
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
+local args = {
+    [1] = 51;
+    [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+    [3] = false;
+    [4] = 3210;
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Place", 9e9):FireServer(unpack(args))
 local args = {
     [1] = 51;
     [2] = CFrame.new(-7.21688604, 383.094055, -23.3589668, 1, 0, 0, 0, 1, 0, 0, 0, 1);
